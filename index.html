@@ -1,14 +1,136 @@
 <!DOCTYPE html>
+
 <head>
-        <meta charset="utf-8">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="author" content="Patrick Haußmann">
-        <meta name="web_author" content="Patrick Haußmann">
-        <meta name="generator" content="By Hand">
-        <meta name="audience" content="Alle"/>
-        <link rel="author" href="https://patrickhaussmann.de"/>
-        <meta name="description" content="Simple Text Editor">
-        <meta name="keywords" content="Editor, Text, Simple, Clean, Writer, Notes">
-        <title>Simple Text Editor!</title>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="author" content="Patrick Haußmann">
+  <meta name="web_author" content="Patrick Haußmann">
+  <meta name="generator" content="By Hand">
+  <meta name="audience" content="Alle" />
+  <link rel="author" href="https://patrickhaussmann.de" />
+  <meta name="description" content="Editor">
+  <meta name="keywords" content="Editor, Text, Simple, Clean, Writer, Notes">
+  <title>Editor</title>
+  <style>
+    textarea#editor {
+      border-style: none;
+      border-color: Transparent;
+      outline: none;
+      overflow: auto;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      resize: none;
+      width: 100%;
+      height: 100%;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    button {
+      padding: 0;
+      border: none;
+      font: inherit;
+      color: inherit;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    .center {
+      margin: 0 auto;
+      overflow: auto;
+      padding: 3rem 0;
+      height: 70%;
+      height: calc(100% - 6rem);
+      width: 70%;
+      width: calc(100% - 20rem);
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .frame {
+      height: 100%
+    }
+
+    .frame>div {
+      border: none
+    }
+
+    .fixed {
+      position: fixed;
+      display: flex;
+      flex-direction: row-reverse;
+      right: 1rem;
+      bottom: 1rem;
+    }
+
+    .fixed>.item {
+      height: 1.7rem;
+      margin-left: 0.5rem;
+    }
+
+    .fixed>.item>img {
+      height: 100%;
+    }
+  </style>
 </head>
-<body contenteditable style="font-size:1rem;line-height:1.4;max-width:60rem;margin:0 auto;padding:4rem;">
+
+<body>
+  <div class="center">
+    <div class="frame">
+      <textarea id="editor"></textarea>
+    </div>
+  </div>
+  <div class="fixed" id="fixed">
+    <a class="item" id="gear" href="/settings/">
+      <img src="/gear.svg">
+    </a>
+  </div>
+  <script>
+    let storage = 'settings';
+
+    function enableSMDE() {
+      // load css
+      var css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.type = "text/css";
+      css.href = "editor.css";
+      css.media = "all";
+      document.head.appendChild(css);
+
+      // load js
+      let js = document.createElement("script");
+      js.src = "editor.js";
+      document.head.appendChild(js);
+    }
+
+    let json;
+    try {
+      json = JSON.parse(window.localStorage.getItem(storage));
+    }
+    catch (err) {
+      console.error(err);
+      window.localStorage.clear();
+    }
+    
+    if (json == null) {
+      json = {'enabled':false}
+      window.localStorage.setItem(storage, JSON.stringify(json));
+    }
+
+    if (json.enabled == true) {
+      enableSMDE()
+    }
+
+  </script>
+</body>
+
+</html>
