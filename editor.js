@@ -20,7 +20,7 @@ header:o[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:o[2].replace(/^ *|\
 *
 */
 
-var editor;
+var simplemde;
   
 
 function guide() {
@@ -34,7 +34,7 @@ function guide() {
     }
   })
   .then(function (data) {
-    editor.value(editor.value()+data)
+    simplemde.value(simplemde.value()+data)
   })
   .catch(function (err) {
     console.error(err);
