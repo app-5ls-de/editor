@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+    </style>
+    <script src="/p5.min.js"></script>
+    <script>
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            background(255);
+        }
+
+        function draw() {
+            stroke(0);
+            if (mouseIsPressed === true) {
+                line(mouseX, mouseY, pmouseX, pmouseY);
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
