@@ -111,6 +111,63 @@
       let js = document.createElement("script");
       js.src = "editor.js";
       document.head.appendChild(js);
+
+
+
+      var simplemde;
+
+
+      function guide() {
+        fetch('/guide.md')
+          .then(function (response) {
+            if (response.ok) {
+              return response.text();
+            }
+            else {
+              throw new Error('guide.md can not be loaded');
+            }
+          })
+          .then(function (data) {
+            simplemde.value(simplemde.value() + data)
+          })
+          .catch(function (err) {
+            console.error(err);
+          })
+      }
+
+      let smde_config = {
+        element: document.getElementById("editor"),
+        spellChecker: false,
+        autoDownloadFontAwesome: false,
+        autofocus: true,
+        autosave: {
+          enabled: true,
+          uniqueId: "editor-autosave",
+          delay: 1000,
+        },
+        indentWithTabs: false,
+        lineWrapping: false,
+        status: false,
+        toolbar: false
+      }
+
+
+      if (!json.autosave) { smde_config.autosave = undefined }
+
+
+      simplemde = new SimpleMDE(smde_config);
+      let bt_questionmark = document.createElement('button');
+      let img_questionmark = document.createElement('img');
+      bt_questionmark.appendChild(img_questionmark);
+      let div_fixed = document.getElementById('fixed');
+      div_fixed.appendChild(bt_questionmark);
+      bt_questionmark.id = 'questionmark';
+      bt_questionmark.classList.add('item');
+      bt_questionmark.onclick = guide;
+      img_questionmark.src = '/questionmark.svg';
+
+
+
     }
 
     let json;
@@ -121,9 +178,9 @@
       console.error(err);
       window.localStorage.clear();
     }
-    
+
     if (json == null) {
-      json = {'enabled':false}
+      json = { 'enabled': false }
       window.localStorage.setItem(storage, JSON.stringify(json));
     }
 
