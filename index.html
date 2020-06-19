@@ -2,192 +2,42 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="author" content="Patrick Haußmann">
-  <meta name="web_author" content="Patrick Haußmann">
-  <meta name="generator" content="By Hand">
-  <meta name="audience" content="Alle" />
-  <link rel="author" href="https://patrickhaussmann.de" />
-  <meta name="description" content="Editor">
-  <meta name="keywords" content="Editor, Text, Simple, Clean, Writer, Notes">
-  <title>Editor</title>
+  <title>Write</title>
   <style>
-    textarea#editor {
-      border-style: none;
-      border-color: Transparent;
-      outline: none;
-      overflow: auto;
-      line-height: 1.4;
-      margin: 0;
-      padding: 0;
-      resize: none;
-      width: 100%;
-      height: 100%;
-      font-family: inherit;
-      font-size: inherit;
-      background-color: white;
-    }
 
-    button {
-      padding: 0;
-      border: none;
-      font: inherit;
-      color: inherit;
-      background-color: transparent;
-      cursor: pointer;
-    }
-
-    button:focus {
-      outline: none;
-    }
-
-    .center {
-      margin: 0 auto;
-      overflow: auto;
-      padding: 3rem 0;
-      height: 70%;
-      height: calc(100% - 6rem);
-      width: 70%;
-      width: calc(100% - 20rem);
-    }
-
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-    }
-
-    .frame {
-      height: 100%
-    }
-
-    .frame>div {
-      border: none
-    }
-
-    .fixed {
-      position: fixed;
-      display: flex;
-      flex-direction: row-reverse;
-      right: 1rem;
-      bottom: 1rem;
-    }
-
-    .fixed>.item {
-      height: 1.7rem;
-      margin-left: 0.5rem;
-    }
-
-    .fixed>.item>img {
-      height: 100%;
-    }
   </style>
+  <link href="/quill-v1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="center">
-    <div class="frame">
-      <textarea id="editor"></textarea>
-    </div>
+
+  <!-- Create the editor container -->
+  <div id="editor">
+    <p>Hello World!</p>
+    <p>Some initial <strong>bold</strong> text</p>
+    <p><br></p>
   </div>
-  <div class="fixed" id="fixed">
-    <a class="item" id="gear" href="/settings/">
-      <img src="/gear.svg">
-    </a>
-  </div>
+
+  <!-- Include the Quill library -->
+  <script src="/quill-v1.3.6/quill.js"></script>
+
+  <!-- Initialize Quill editor -->
   <script>
-    let storage = 'settings';
-
-    function enableSMDE() {
-      // load css
-      var css = document.createElement("link");
-      css.rel = "stylesheet";
-      css.type = "text/css";
-      css.href = "editor.css";
-      css.media = "all";
-      document.head.appendChild(css);
-
-      // load js
-      let js = document.createElement("script");
-      js.src = "editor.js";
-      document.head.appendChild(js);
-
-
-
-      var simplemde;
-
-
-      function guide() {
-        fetch('/guide.md')
-          .then(function (response) {
-            if (response.ok) {
-              return response.text();
-            }
-            else {
-              throw new Error('guide.md can not be loaded');
-            }
-          })
-          .then(function (data) {
-            simplemde.value(simplemde.value() + data)
-          })
-          .catch(function (err) {
-            console.error(err);
-          })
-      }
-
-      let smde_config = {
-        element: document.getElementById("editor"),
-        spellChecker: false,
-        autoDownloadFontAwesome: false,
-        autofocus: true,
-        autosave: {
-          enabled: true,
-          uniqueId: "editor-autosave",
-          delay: 1000,
-        },
-        indentWithTabs: false,
-        lineWrapping: false,
-        status: false,
-        toolbar: false
-      }
-
-
-      if (!json.autosave) { smde_config.autosave = undefined }
-
-
-      simplemde = new SimpleMDE(smde_config);
-      let bt_questionmark = document.createElement('button');
-      let img_questionmark = document.createElement('img');
-      bt_questionmark.appendChild(img_questionmark);
-      let div_fixed = document.getElementById('fixed');
-      div_fixed.appendChild(bt_questionmark);
-      bt_questionmark.id = 'questionmark';
-      bt_questionmark.classList.add('item');
-      bt_questionmark.onclick = guide;
-      img_questionmark.src = '/questionmark.svg';
-
-
-
-    }
-
-    let json;
-    try {
-      json = JSON.parse(window.localStorage.getItem(storage));
-    }
-    catch (err) {
-      console.error(err);
-      window.localStorage.clear();
-    }
-
-    if (json == null) {
-      json = { 'enabled': false }
-      window.localStorage.setItem(storage, JSON.stringify(json));
-    }
-
-    if (json.enabled == true) {
-      enableSMDE()
-    }
-
+/*     var quill = new Quill('#editor-container', {
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          ['image', 'code-block']
+        ]
+      },
+      theme: 'snow'  // or 'bubble'
+    }); */
+    
+    var quill = new Quill('#editor', {
+      placeholder: 'Write...',
+      theme: 'snow'
+    });
   </script>
 </body>
 
