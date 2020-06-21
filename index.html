@@ -269,14 +269,6 @@
       }
     }, 3000);
 
-    window.addEventListener('beforeunload', (event) => {
-      if (change.length() > 0) {
-        const data = JSON.stringify(quill.getContents())
-        localStorage.setItem('content', data);
-        return 'There are unsaved changes. Are you sure you want to leave?';
-      }
-    });
-
   </script>
 </body>
 
