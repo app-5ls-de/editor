@@ -10,32 +10,12 @@
 </head>
 
 <body>
+  <div id="editor-container"></div>
 
-  <!-- Create the editor container -->
-  <div id="editor">
-    <p>Hello World!</p>
-    <p>Some initial <strong>bold</strong> text</p>
-    <p><br></p>
-  </div>
-
-  <!-- Include the Quill library -->
   <script src="/quill-v1.3.6/quill.js"></script>
-
-  <!-- Initialize Quill editor -->
   <script>
-/*     var quill = new Quill('#editor-container', {
-      modules: {
-        toolbar: [
-          [{ header: [1, 2, false] }],
-          ['bold', 'italic', 'underline'],
-          ['image', 'code-block']
-        ]
-      },
-      theme: 'snow'  // or 'bubble'
-    }); */
-    
-    var quill = new Quill('#editor', {
-      placeholder: 'Write...',
+    var quill = new Quill('#editor-container', {
+      readOnly: false,
       theme: 'snow'
     });
   </script>
