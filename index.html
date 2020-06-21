@@ -270,8 +270,7 @@
         localStorage.setItem('content', data);
         change = new Delta();
       }
-    }, 5 * 1000);
-
+    }, 3000);
 
     window.addEventListener('beforeunload', (event) => {
       if (change.length() > 0) {
