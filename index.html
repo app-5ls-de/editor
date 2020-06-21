@@ -119,7 +119,11 @@
     var quill = new Quill('#editor-container', {
       modules: {
         toolbar: {
-          container: '#toolbar-container'
+          container: '#toolbar-container',
+          handlers: {
+            'undo': function (value) { quill.history.undo() },
+            'redo': function (value) { quill.history.redo() },
+          }
         },
         history: {}
       },
