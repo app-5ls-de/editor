@@ -202,6 +202,7 @@
 
   <script src="/quill-v1.3.6/quill.js"></script>
   <script>
+    var Delta = Quill.import('delta');
     var quill = new Quill('#editor-container', {
       modules: {
         toolbar: {
@@ -218,6 +219,28 @@
       readOnly: false,
       theme: 'snow'
     });
+
+    const data = localStorage.getItem('content');
+    if (data) {
+      quill.setContents(JSON.parse(data))
+    }
+
+    
+    var change = new Delta();
+    quill.on('text-change', function (delta) {
+      change = change.compose(delta);
+    });
+
+    setInterval(function () {
+      if (change.length() > 0) {
+        console.log('Saving changes', change);
+        const data = JSON.stringify(quill.getContents())
+        localStorage.setItem('content', data);
+        change = new Delta();
+      }
+    }, 5 * 1000);
+
+
   </script>
 </body>
 
