@@ -10,11 +10,23 @@
 </head>
 
 <body>
-  <div id="editor-container"></div>
+  </div>
+  <div id="content-container">
+    <div id="toolbar-container">
+      <span class="ql-formats">
+        <button class="ql-bold"></button>
+        <button class="ql-italic"></button>
+      </span>
+    </div>
+      <div id="editor-container"></div>
+  </div>
 
   <script src="/quill-v1.3.6/quill.js"></script>
   <script>
     var quill = new Quill('#editor-container', {
+      modules: {
+        toolbar: '#toolbar-container'
+      },
       readOnly: false,
       theme: 'snow'
     });
