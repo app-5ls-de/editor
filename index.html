@@ -33,6 +33,11 @@
       overflow-y: auto;
     }
 
+    .ql-toolbar,
+    .ql-container {
+      border: none !important;
+    }
+
     .ql-toolbar {
       min-width: 100%;
       margin-top: -0.7rem;
@@ -80,6 +85,11 @@
 
     .ql-editor .ql-formats {
       min-width: fit-content !important;
+    }
+
+    hr.divider {
+      margin: 0;
+      width: 100%;
     }
   </style>
   <link href="/quill-v1.3.6/quill.snow.css" rel="stylesheet">
@@ -162,6 +172,7 @@
       </span>
 
     </div>
+    <hr class="divider">
     <div id="scrolling-container">
       <div id="editor-container"></div>
     </div>
