@@ -202,6 +202,11 @@
 
   <script src="/quill-v1.3.6/quill.js"></script>
   <script>
+    function uuid() {
+      function b(a) { return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b) }/* https://gist.github.com/jed/982883 */
+      return b()
+    }
+
     var Delta = Quill.import('delta');
     var quill = new Quill('#editor-container', {
       modules: {
@@ -225,7 +230,7 @@
       quill.setContents(JSON.parse(data))
     }
 
-    
+
     var change = new Delta();
     quill.on('text-change', function (delta) {
       change = change.compose(delta);
