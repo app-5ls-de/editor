@@ -27,6 +27,17 @@ function throttle(callback, delay) {
     return throttledEventHandler;
 }
 
+function init() {
+    const data = localStorage.getItem('content');
+    if (data) {
+        quill.setContents(JSON.parse(data))
+    }
+    
+}
+
+
+
+
 var Delta = Quill.import('delta');
 var quill = new Quill('#editor-container', {
     modules: {
@@ -45,10 +56,7 @@ var quill = new Quill('#editor-container', {
     theme: 'snow'
 });
 
-const data = localStorage.getItem('content');
-if (data) {
-    quill.setContents(JSON.parse(data))
-}
+init()
 
 
 var change = new Delta();
