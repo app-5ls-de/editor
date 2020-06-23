@@ -8,7 +8,11 @@ function throttle(callback, delay) {
     let storedEvent = null;
 
     const throttledEventHandler = event => {
-        storedEvent = event;
+        if (event) {
+            storedEvent = event;
+        } else {
+            storedEvent = null
+        }
 
         const shouldHandleEvent = !throttleTimeout;
         if (shouldHandleEvent) {
@@ -16,9 +20,9 @@ function throttle(callback, delay) {
             throttleTimeout = setTimeout(() => {
                 throttleTimeout = null;
 
-                if (storedEvent) {
+                if (storedEvent || storedEvent === null) {
                     callback(storedEvent);
-                    storedEvent = null;
+                    storedEvent = undefined;
                 }
             }, delay);
         }
@@ -62,7 +66,7 @@ init()
 var change = new Delta();
 quill.on('text-change', function (delta) {
     change = change.compose(delta)
-    saveToLocalStorage('text-change')
+    saveToLocalStorage()
 });
 
 var saveToLocalStorage = throttle(function (trigger) {
