@@ -32,11 +32,21 @@ function throttle(callback, delay) {
 }
 
 function init() {
-    const data = localStorage.getItem('content');
-    if (data) {
-        quill.setContents(JSON.parse(data))
+    if (shared) {
+        const params = new URL(location.href).searchParams
+        id = params.get('id')
+        if (!id) { window.location.href = window.location.origin }
+        pwd = params.get('pwd')
+
+        synchronize()
+
+    } else {
+        const data = localStorage.getItem('content');
+        if (data) {
+            quill.setContents(JSON.parse(data))
+        }
     }
-    
+
 }
 
 
@@ -68,6 +78,8 @@ quill.on('text-change', function (delta) {
     change = change.compose(delta)
     saveToLocalStorage()
 });
+
+var upload = throttle(synchronize, 10000)
 
 var saveToLocalStorage = throttle(function (trigger) {
     if (change.length() > 0) {
