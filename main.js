@@ -215,8 +215,8 @@ let quillOptions = {
             handlers: {
                 'undo': function () { quill.history.undo() },
                 'redo': function () { quill.history.redo() },
-                'download': downloadHandler,
-                'upload': uploadHandler,
+                /* 'download': downloadHandler,
+                'upload': uploadHandler, */
                 'synchronize': synchronizeHandler,
                 'share': share
             }
