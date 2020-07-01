@@ -228,6 +228,10 @@ if (localStorage.getItem(state.private.id)) {
 document.getElementById("toolbar-container").style.display = "flex"
 if (shared && !state.private.key) { // if shared but no write-key 
     quillOptions.readOnly = true
+    quillOptions.placeholder = ''
+    var sheet = window.document.styleSheets[0];
+    sheet.insertRule('.ql-editor>*{cursor:default!important}', sheet.cssRules.length);
+    sheet.insertRule('hr.divider{display:none}', sheet.cssRules.length);
     document.getElementById("toolbar-container").style.display = "none"
 } else {
 }
