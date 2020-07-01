@@ -95,6 +95,7 @@ function setRemoteData() {
         if (!state.private.changeSinceLastUpload) return //nothing to do
         if (JSON.stringify(state.private.changeSinceLastUpload) == JSON.stringify(new Delta())) {
             state.private.changeSinceLastUpload = null
+            saveToLocalStorage()
             return
         } // empty delta
 
