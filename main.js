@@ -138,13 +138,11 @@ function setRemoteData() {
 }
 
 
-function synchronize(reloaded) {
+function synchronize() {
     if (state.private.changeSinceLastUpload) {
         setRemoteData()
     } else {
-        if (reloaded) {
-            getRemoteData()
-        }
+        getRemoteData()
     }
 }
 
