@@ -43,7 +43,7 @@ function throttle(callback, delay) {
 }
 
 
-var jsonboxIdentifier = "6TNXdKYzJG6rfO9KEl6b" + "_"
+var jsonboxIdentifier = "kQSr3PEn1xNPh45NDBsn" + "_"
 var state = {
     private: {
         key: undefined,
@@ -149,40 +149,18 @@ function synchronize() {
 
 function parse(data) {
     let parsed = JSON.parse(data)
-    //console.log('before', parsed)
+    //console.log('before', parsed.private.changeSinceLastUpload)
+
     parsed.private.changeSinceLastUpload = new Delta(parsed.private.changeSinceLastUpload)
-    state.public.content = new Delta(parsed.public.content)
-    //console.log('after', parsed)
+    parsed.public.content = new Delta(parsed.public.content)
+
+    if (JSON.stringify(parsed.private.changeSinceLastUpload) == JSON.stringify(new Delta())) parsed.private.changeSinceLastUpload = null // empty delta
+    if (JSON.stringify(parsed.private.content) == JSON.stringify(new Delta())) parsed.private.content = null // empty delta
+
+    //console.log('after', parsed.private.changeSinceLastUpload)
     return parsed
 }
 
-
-function init() {
-    if (shared) {
-        const params = new URL(location.href).searchParams
-        state.private.id = params.get('id')
-        state.private.key = params.get('pwd')
-        if (!state.private.id || state.private.id.length < 20) { window.location.href = window.location.origin }
-
-        document.getElementById("syncButtons").style.display = "unset"
-    } else {
-        document.getElementById("shareButton").style.display = "unset"
-    }
-
-    const data = localStorage.getItem(state.private.id)
-    if (data) {
-        state = parse(data)
-    } else {
-        saveToLocalStorage()
-    }
-    // if read-only only show download button
-    // if write-only (read-only master) only show upload button
-
-    if (state.public.content) {
-        quill.setContents(state.public.content, 'silent')
-    }
-    if (shared) synchronize(true)
-}
 
 function share() {
     let oldId = state.private.id
@@ -198,7 +176,9 @@ function share() {
 
 function saveToLocalStorage() {
     state.public.content = quill.getContents()
+    state.private.LastModified = new Date()
     localStorage.setItem(state.private.id, JSON.stringify(state))
+    state.private.LastModified = undefined
 }
 
 
@@ -228,9 +208,48 @@ let quillOptions = {
     readOnly: false,
     theme: 'snow'
 }
-init()
+
+if (shared) {
+    const params = new URL(location.href).searchParams
+    state.private.id = params.get('id')
+    state.private.key = params.get('pwd')
+    if (!state.private.id || state.private.id.length < 20) { window.location.href = window.location.origin }
+
+    document.getElementById("syncButtons").style.display = "unset"
+} else {
+    document.getElementById("shareButton").style.display = "unset"
+}
+
+
+if (localStorage.getItem(state.private.id)) {
+    state = parse(localStorage.getItem(state.private.id))
+}
+
+if (shared && !state.private.key) { // if shared but no write-key 
+    quillOptions.readOnly = true
+    //document.getElementById("toolbar-container").style.display = "none"
+} else {
+    document.getElementById("toolbar-container").style.display = "flex"
+}
 
 var quill = new Quill('#editor-container', quillOptions)
+
+
+if (!localStorage.getItem(state.private.id)) {
+    saveToLocalStorage()
+}
+
+
+// if read-only only show download button
+// if write-only (read-only master) only show upload button
+
+if (state.public.content) {
+    quill.setContents(state.public.content, 'silent')
+}
+if (shared) synchronize(true)
+
+
+
 
 quill.on('text-change', function (delta) {
     //console.log('text-change event')
