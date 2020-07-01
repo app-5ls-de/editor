@@ -1,3 +1,5 @@
+var Delta = Quill.import('delta')
+
 function random_uuid() {
     function b(a) { return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b) }/* https://gist.github.com/jed/982883 */
     return b()
@@ -207,8 +209,7 @@ var uploadHandler = throttle(setRemoteData, 10000)
 var synchronizeHandler = throttle(synchronize, 10000)
 
 
-var Delta = Quill.import('delta')
-var quill = new Quill('#editor-container', {
+let quillOptions = {
     modules: {
         toolbar: {
             container: '#toolbar-container',
@@ -227,9 +228,10 @@ var quill = new Quill('#editor-container', {
     placeholder: 'Write...',
     readOnly: false,
     theme: 'snow'
-})
+}
 init()
 
+var quill = new Quill('#editor-container', quillOptions)
 
 quill.on('text-change', function (delta) {
     //console.log('text-change event')
