@@ -225,11 +225,11 @@ if (localStorage.getItem(state.private.id)) {
     state = parse(localStorage.getItem(state.private.id))
 }
 
+document.getElementById("toolbar-container").style.display = "flex"
 if (shared && !state.private.key) { // if shared but no write-key 
     quillOptions.readOnly = true
-    //document.getElementById("toolbar-container").style.display = "none"
+    document.getElementById("toolbar-container").style.display = "none"
 } else {
-    document.getElementById("toolbar-container").style.display = "flex"
 }
 
 var quill = new Quill('#editor-container', quillOptions)
