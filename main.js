@@ -168,16 +168,11 @@ function setRemoteData(changesToUpload) {
 
 function synchronize() {
     getRemoteData()
-    /* if (state.private.changeSinceLastUpload) {
-        setRemoteData()
-    } else {
-    } */
 }
 
 
 function parse(data) {
     let parsed = JSON.parse(data)
-    //console.log('before', parsed.private.changeSinceLastUpload)
 
     parsed.private.changeSinceLastUpload = new Delta(parsed.private.changeSinceLastUpload)
     parsed.public.content = new Delta(parsed.public.content)
@@ -185,7 +180,6 @@ function parse(data) {
     if (JSON.stringify(parsed.private.changeSinceLastUpload) == JSON.stringify(new Delta())) parsed.private.changeSinceLastUpload = null // empty delta
     if (JSON.stringify(parsed.private.content) == JSON.stringify(new Delta())) parsed.private.content = null // empty delta
 
-    //console.log('after', parsed.private.changeSinceLastUpload)
     return parsed
 }
 
@@ -211,8 +205,6 @@ function saveToLocalStorage() {
 
 
 var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
-/* var downloadHandler = throttle(getRemoteData, 1000 * 10)
-var uploadHandler = throttle(setRemoteData, 1000 * 10) */
 var synchronizeHandler = throttle(synchronize, 1000 * 10)
 
 
@@ -226,9 +218,6 @@ let quillOptions = {
             handlers: {
                 'undo': function () { quill.history.undo() },
                 'redo': function () { quill.history.redo() },
-                /* 'download': downloadHandler,
-                'upload': uploadHandler, */
-                'synchronize': synchronizeHandler,
                 'share': share
             }
         },
@@ -245,10 +234,6 @@ if (shared) {
     state.private.id = params.get('id')
     state.private.key = params.get('pwd')
     if (!state.private.id || state.private.id.length < 20) { window.location.href = window.location.origin }
-
-    document.getElementById("syncButtons").style.display = "unset"
-} else {
-    document.getElementById("shareButton").style.display = "unset"
 }
 
 
@@ -275,9 +260,6 @@ if (!localStorage.getItem(state.private.id)) {
 }
 
 
-// if read-only only show download button
-// if write-only (read-only master) only show upload button
-
 if (state.public.content) {
     quill.setContents(state.public.content, 'silent')
 }
@@ -285,9 +267,7 @@ if (shared) synchronize()
 
 
 
-
 quill.on('text-change', function (delta) {
-    //console.log('text-change event')
     if (shared) {
         if (!state.private.changeSinceLastUpload) {
             state.private.changeSinceLastUpload = new Delta()
