@@ -97,7 +97,7 @@ function getRemoteData() {
                         let remoteChangeTransformed = localChange.transform(remoteChange)
                         quill.updateContents(remoteChangeTransformed, 'silent')
 
-                        changesToUpload = remoteChange.transform(localChange,true)//localChange.compose(remoteChangeTransformed)
+                        changesToUpload = remoteChange.transform(localChange, true)//localChange.compose(remoteChangeTransformed)
                     } else {
                         quill.updateContents(remoteChange, 'silent')
                     }
@@ -129,10 +129,11 @@ function setRemoteData(changesToUpload) {
             delta: JSON.stringify(changesToUpload)
         }
         if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
-            data.id = state.private.LastSyncedId + 1
+            data.id = state.private.LastSyncedId
         } else {
-            data.id = 1
+            data.id = 0
         }
+        data.id += Math.floor(Math.random() * 1000) + 1
 
         const options = {
             method: 'POST',
