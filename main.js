@@ -43,7 +43,13 @@ function throttle(callback, delay) {
 }
 
 
-var jsonboxIdentifier = "kQSr3PEn1xNPh45NDBsn" + "_"
+function copyDelta(delta) {
+    if (!delta) return delta
+    return new Delta(JSON.parse(JSON.stringify(delta)))
+}
+
+
+var jsonboxIdentifier = "nnr460Poh3mwCGiHOgci" + "_"
 var state = {
     private: {
         key: undefined,
@@ -59,6 +65,8 @@ var state = {
 
 function getRemoteData() {
     if (shared) {
+        localChange = copyDelta(state.private.changeSinceLastUpload)
+        state.private.changeSinceLastUpload = null
         let sortQuery = ""
         if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
             sortQuery = "&q=id:>" + state.private.LastSyncedId
@@ -75,32 +83,50 @@ function getRemoteData() {
             .then((response) => { return response.json() })
             .then(function (response) {
                 //console.log('Request succeeded with JSON response', response)
+                let changesToUpload = localChange
+
                 if (response.length > 0) {
                     //console.log("should now apply changes: ", response)
+                    let remoteChange = new Delta()
                     for (let i = 0; i < response.length; i++) {
-                        quill.updateContents(JSON.parse(response[i].delta), 'silent')
+                        remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
+                        //quill.updateContents(JSON.parse(response[i].delta), 'silent')
                     }
+
+                    if (localChange) {
+                        let remoteChangeTransformed = localChange.transform(remoteChange)
+                        quill.updateContents(remoteChangeTransformed, 'silent')
+
+                        changesToUpload = remoteChange.transform(localChange,true)//localChange.compose(remoteChangeTransformed)
+                    } else {
+                        quill.updateContents(remoteChange, 'silent')
+                    }
+
                     state.private.LastSyncedId = response[response.length - 1].id
                     saveToLocalStorage()
                 }
+                setRemoteData(changesToUpload)
             }).catch(function (error) {
                 console.log('Request failed', error)
+                state.private.changeSinceLastUpload = localChange.compose(state.private.changeSinceLastUpload)
             })
     }
 }
 
 
-function setRemoteData() {
+function setRemoteData(changesToUpload) {
     if (shared) {
-        if (!state.private.changeSinceLastUpload) return //nothing to do
-        if (JSON.stringify(state.private.changeSinceLastUpload) == JSON.stringify(new Delta()) || !state.private.key) {
+        if (!changesToUpload) {
+            if (!state.private.changeSinceLastUpload) return //nothing to do
+            changesToUpload = copyDelta(state.private.changeSinceLastUpload)
             state.private.changeSinceLastUpload = null
-            saveToLocalStorage()
-            return
-        } // empty delta
+        }
+        if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) return // empty delta
+        if (!state.private.key) return
 
+        console.log(1234)
         data = {
-            delta: JSON.stringify(state.private.changeSinceLastUpload)
+            delta: JSON.stringify(changesToUpload)
         }
         if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
             data.id = state.private.LastSyncedId + 1
@@ -129,21 +155,22 @@ function setRemoteData() {
             .then(function (response) {
                 //console.log('Request succeeded with JSON response', response)
                 state.private.LastSyncedId = data.id
-                state.private.changeSinceLastUpload = null
+                /* state.private.changeSinceLastUpload = null */
                 saveToLocalStorage()
             }).catch(function (error) {
                 console.log('Request failed', error)
+                state.private.changeSinceLastUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
             })
     }
 }
 
 
 function synchronize() {
-    if (state.private.changeSinceLastUpload) {
+    getRemoteData()
+    /* if (state.private.changeSinceLastUpload) {
         setRemoteData()
     } else {
-        getRemoteData()
-    }
+    } */
 }
 
 
@@ -250,7 +277,7 @@ if (!localStorage.getItem(state.private.id)) {
 if (state.public.content) {
     quill.setContents(state.public.content, 'silent')
 }
-if (shared) synchronize(true)
+if (shared) synchronize()
 
 
 
