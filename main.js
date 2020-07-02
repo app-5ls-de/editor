@@ -210,10 +210,13 @@ function saveToLocalStorage() {
 }
 
 
-var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000)
-var downloadHandler = throttle(getRemoteData, 10000)
-var uploadHandler = throttle(setRemoteData, 10000)
-var synchronizeHandler = throttle(synchronize, 10000)
+var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
+/* var downloadHandler = throttle(getRemoteData, 1000 * 10)
+var uploadHandler = throttle(setRemoteData, 1000 * 10) */
+var synchronizeHandler = throttle(synchronize, 1000 * 10)
+
+
+ifvisible.onEvery(15, synchronizeHandler)// If page is visible run this function on every 15 seconds
 
 
 let quillOptions = {
