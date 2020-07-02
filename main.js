@@ -233,7 +233,9 @@ if (shared) {
     const params = new URL(location.href).searchParams
     state.private.id = params.get('id')
     state.private.key = params.get('pwd')
-    if (!state.private.id || state.private.id.length < 20) { window.location.href = window.location.origin }
+    if (!state.private.id || state.private.id.length < 20) { window.location.href = window.location.origin }	
+} else {	
+    document.getElementById("shareButton").style.display = "unset"
 }
 
 
