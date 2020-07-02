@@ -49,7 +49,7 @@ function copyDelta(delta) {
 }
 
 
-var jsonboxIdentifier = "nnr460Poh3mwCGiHOgci" + "_"
+var jsonboxIdentifier = "7PtWsjtDv4VTB4PStlLF" + "_"
 var state = {
     private: {
         key: undefined,
