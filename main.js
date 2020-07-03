@@ -72,7 +72,7 @@ function getRemoteData() {
             sortQuery = "&q=id:>" + state.private.LastSyncedId
         }
 
-        fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id + "?sort=id" + sortQuery)
+        fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
             .then((response) => {
                 if (response.ok) {
                     return Promise.resolve(response)
