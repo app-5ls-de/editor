@@ -1,7 +1,7 @@
 ---
 layout: bare
 ---
-<h1><a href="/local">Local</a></h1>
+<h1 id="local"><a href="/local">Local</a></h1>
 <hr>
 <h1>Shared</h1>
 <div style="padding-left: 2rem;">
@@ -23,6 +23,21 @@ layout: bare
 <h1>New</h1>
 <a href="/new?auto">create new share</a>
 <script>
+    if (localStorage.hasOwnProperty("local") && localStorage.local) {
+        let button = document.createElement("button")
+        button.innerHTML = "X"
+        button.style["font-size"] = "1rem"
+        button.onclick = function () {
+            localStorage.removeItem(key);
+            location.reload();
+        }
+        button.onclick = function () {
+            localStorage.removeItem("local")
+            location.reload();
+        }
+        document.getElementById("local").append(button)
+    }
+
     for (const key in localStorage) {
         if (localStorage.hasOwnProperty(key) && key != "local" && key != "null" && key != "settings") {
             let element
