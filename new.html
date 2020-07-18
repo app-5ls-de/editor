@@ -1,0 +1,10 @@
+---
+layout: bare
+---
+<script src="/main.js"></script>
+<script>
+    const params = new URL(location.href).searchParams
+    if (params.get('auto') != null) {
+        window.location.href = window.location.origin + "/shared?id=" + random_boxid() + "&pwd=" + random_uuid()
+    }
+</script>
