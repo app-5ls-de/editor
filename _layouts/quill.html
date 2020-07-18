@@ -90,10 +90,5 @@ layout: bare
 
   <script src="/quill-v1.3.6/quill.js"></script>
   <script src="/ifvisible.js-v1.0.6/ifvisible.js "></script>
-  <script>
-    var shared
-    {% if page.shared %}
-    shared = true
-    {% endif %}
-  </script>
+  {{content}}
   <script src="/main.js"></script>
