@@ -24,14 +24,27 @@ layout: bare
 <a href="/new?auto">create new share</a>
 <script>
     for (const key in localStorage) {
-        if (localStorage.hasOwnProperty(key) && key != "local" && key != "null") {
-            const element = JSON.parse(localStorage[key])
+        if (localStorage.hasOwnProperty(key) && key != "local" && key != "null" && key != "settings") {
+            let element
+            try {
+                element = JSON.parse(localStorage[key])
+            } catch (error) {
+                //console.log(error)
+                localStorage.removeItem(key)
+                continue
+            }
+            console.log(element)
+            if (!element || !element.private || !element.private.id) {
+                localStorage.removeItem(key)
+                continue
+            }
+
             let li = document.createElement("li")
             let a = document.createElement("a")
             let button = document.createElement("button")
 
             button.innerHTML = "X"
-            button.onclick = function() {
+            button.onclick = function () {
                 localStorage.removeItem(key);
                 location.reload();
             }

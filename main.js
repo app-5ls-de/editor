@@ -34,7 +34,7 @@ function isvalid_boxid(boxid) {
     if (!boxid) return false
     if (typeof boxid != "string") return false
     if (boxid.length == 0) return false
-    if (boxid == "local" || boxid == "null") return false
+    if (boxid == "local" || boxid == "null" || boxid == "settings") return false
 
     return true
 }
