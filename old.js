@@ -175,7 +175,10 @@ let quillOptions = {
                 'redo': function() {
                     quill.history.redo()
                 },
-                'share': share
+                'share': share,
+                'home': function(){
+                    location.href = location.origin
+                }
             }
         },
         history: {}
