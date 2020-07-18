@@ -2,3 +2,45 @@
 layout: bare
 ---
 <h1><a href="/local">Local</a></h1>
+<hr>
+<h1>Shared</h1>
+<div style="padding-left: 2rem;">
+    <style>
+        button {
+            /* float: right;
+            margin-right: 70%; */
+            margin-left: 2rem;
+        }
+
+        li {
+            height: 2rem;
+        }
+    </style>
+    <ul id="list">
+    </ul>
+</div>
+<hr>
+<h1>New</h1>
+<a href="/new?auto">create new share</a>
+<script>
+    for (const key in localStorage) {
+        if (localStorage.hasOwnProperty(key) && key != "local" && key != "null") {
+            const element = JSON.parse(localStorage[key])
+            let li = document.createElement("li")
+            let a = document.createElement("a")
+            let button = document.createElement("button")
+
+            button.innerHTML = "X"
+            button.onclick = function() {
+                localStorage.removeItem(key);
+                location.reload();
+            }
+            a.innerHTML = element.private.id
+            a.href = location.origin + "/shared?id=" + element.private.id
+            li.append(a)
+            li.append(button)
+            document.getElementById("list").append(li)
+
+        }
+    }
+</script>
