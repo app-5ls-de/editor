@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Editor</title>
+
+    {% if page.layout == "quill" %}
+    <link href="/quill-v1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="/quill.css">
+    {% endif %}
+    <link rel="stylesheet" href="/main.css">
+</head>
+
+<body>
+    {{content}}
+</body>
+
+</html>
