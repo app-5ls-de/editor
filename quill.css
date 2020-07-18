@@ -96,3 +96,11 @@
 .ql-editor .ql-formats {
     min-width: fit-content !important;
 }
+
+@media print {
+    #toolbar-container,
+    #content-container>hr,
+    .ql-blank::before {
+        display: none !important;
+    }
+}
