@@ -1,4 +1,4 @@
-const CACHE = "static-cache-v1.0.4";
+const CACHE = "static-cache-v1.0.5";
 const precacheFiles = [
   '/',
   '/index.html',
@@ -13,7 +13,7 @@ const precacheFiles = [
   '/new',
   '/main.css',
   '/main.js',
-  '/old.js',
+  '/quill.js',
   '/quill.css',
   '/logo16px.png',
   '/logo24px.png',
