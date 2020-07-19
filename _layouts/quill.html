@@ -6,15 +6,11 @@ layout: bare
 
         <span class="ql-formats">
             <button class="ql-home" title="Home">
-                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 58.365 58.365"
-                    style="enable-background:new 0 0 58.365 58.365;" xml:space="preserve">
-                    <path d="M57.863,26.632l-8.681-8.061V5.365h-10v3.921L29.182,0L0.502,26.632c-0.404,0.376-0.428,1.009-0.052,1.414
-	c0.375,0.404,1.008,0.427,1.414,0.052l3.319-3.082v33.349h16h16h16V25.015l3.319,3.082c0.192,0.179,0.437,0.267,0.681,0.267
-	c0.269,0,0.536-0.107,0.732-0.319C58.291,27.641,58.267,27.008,57.863,26.632z M41.182,7.365h6v9.349l-6-5.571V7.365z
-	 M23.182,56.365V35.302c0-0.517,0.42-0.937,0.937-0.937h10.126c0.517,0,0.937,0.42,0.937,0.937v21.063H23.182z M51.182,56.365h-14
-	V35.302c0-1.62-1.317-2.937-2.937-2.937H24.119c-1.62,0-2.937,1.317-2.937,2.937v21.063h-14V23.158l22-20.429l14.28,13.26
-	l5.72,5.311v0l2,1.857V56.365z" />
+                <svg viewBox="0 0 251.479 251.479">
+                    <path class="ql-fill"
+                        d="M209.355,135.551c-4.143,0-7.5,3.358-7.5,7.5v76.109H49.634v-76.109c0-4.142-3.357-7.5-7.5-7.5c-4.143,0-7.5,3.358-7.5,7.5 v83.609c0,4.142,3.357,7.5,7.5,7.5h167.221c4.143,0,7.5-3.358,7.5-7.5v-83.609C216.855,138.909,213.497,135.551,209.355,135.551z" />
+                    <path class="ql-fill"
+                        d="M249.282,137.748L131.035,19.515c-2.928-2.929-7.677-2.928-10.606,0L2.197,137.748c-2.929,2.929-2.929,7.678,0,10.606 c1.465,1.464,3.385,2.197,5.304,2.197c1.92,0,3.839-0.732,5.304-2.197l112.929-112.93l112.943,112.93 c2.928,2.929,7.677,2.928,10.607-0.001C252.211,145.425,252.211,140.676,249.282,137.748z" />
                 </svg>
             </button>
         </span>
@@ -33,6 +29,8 @@ layout: bare
                 </svg>
             </button>
         </span>
+
+        <div class="spacer"></div>
 
         <span class="ql-formats">
             <button class="ql-size" value="small" title="Small">
@@ -58,7 +56,7 @@ layout: bare
             <button class="ql-strike" title="Strike"></button>
         </span>
 
-        <span class="ql-formats">
+        <span class="ql-formats" style="display: none;">
             <select class="ql-color" title="Color"></select>
             <select class="ql-background" title="Background Color"></select>
         </span>
@@ -79,28 +77,14 @@ layout: bare
         </span>
 
         <span class="ql-formats">
-            <select class="ql-align" title="Justification">
-                <option selected="selected"></option>
-                <option value="center"></option>
-                <option value="right"></option>
-                <option value="justify"></option>
-            </select>
-        </span>
-
-        <span class="ql-formats" id="shareButton" style="display: none;">
-            <button class="ql-share" title="Share">
-                <svg viewBox="0 0 458.624 458.624">
-                    <path class="ql-fill"
-                        d="M339.588,314.529c-14.215,0-27.456,4.133-38.621,11.239l-112.682-78.67c1.809-6.315,2.798-12.976,2.798-19.871 c0-6.896-0.989-13.557-2.798-19.871l109.64-76.547c11.764,8.356,26.133,13.286,41.662,13.286c39.79,0,72.047-32.257,72.047-72.047 C411.634,32.258,379.378,0,339.588,0c-39.79,0-72.047,32.257-72.047,72.047c0,5.255,0.578,10.373,1.646,15.308l-112.424,78.491 c-10.974-6.759-23.892-10.666-37.727-10.666c-39.79,0-72.047,32.257-72.047,72.047s32.256,72.047,72.047,72.047 c13.834,0,26.753-3.907,37.727-10.666l113.292,79.097c-1.629,6.017-2.514,12.34-2.514,18.872c0,39.79,32.257,72.047,72.047,72.047 c39.79,0,72.047-32.257,72.047-72.047C411.635,346.787,379.378,314.529,339.588,314.529z" />
-                </svg>
-            </button>
+            <button class="ql-align" value="" title="Justification"></button>
+            <button class="ql-align" value="justify" title="Justification"></button>
+            <button class="ql-align" value="center" title="Justification"></button>
+            <button class="ql-align" value="right" title="Justification"></button>
         </span>
 
     </div>
-    <hr class="divider">
-    <div id="scrolling-container">
-        <div id="editor-container"></div>
-    </div>
+    <div id="editor-container"></div>
 </div>
 <div id="noscript" style="position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; font-size: 2rem;">
     Please activate javascript to use this site

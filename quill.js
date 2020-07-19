@@ -144,20 +144,7 @@ function parse(data) {
 }
 
 
-function share() {
-    let oldId = state.private.id
-    state.private.id = random_boxid()
-    state.private.key = random_uuid()
-    state.private.changeSinceLastUpload = quill.getContents()
-    saveToLocalStorage()
-    localStorage.removeItem(oldId)
-
-    window.location.href = window.location.origin + "/shared?id=" + state.private.id + "&pwd=" + state.private.key
-}
-
-
 function saveToLocalStorage() {
-    if (!shared && quill.getText() == "\n") {return}
     state.public.content = quill.getContents()
     state.private.LastModified = new Date()
     localStorage.setItem(state.private.id, JSON.stringify(state))
@@ -183,7 +170,6 @@ let quillOptions = {
                 'redo': function() {
                     quill.history.redo()
                 },
-                'share': share,
                 'home': function(){
                     location.href = location.origin
                 }
@@ -191,11 +177,11 @@ let quillOptions = {
         },
         history: {}
     },
-    scrollingContainer: '#scrolling-container',
     placeholder: 'Write...',
     readOnly: false,
     theme: 'snow'
 }
+var quill = new Quill('#editor-container', quillOptions)
 
 if (shared) {
     const params = new URL(location.href).searchParams
@@ -204,8 +190,6 @@ if (shared) {
     if (!state.private.id || state.private.id.length < 20) {
         window.location.href = window.location.origin
     }
-} else {
-    document.getElementById("shareButton").style.display = "unset"
 }
 
 
@@ -213,17 +197,22 @@ if (localStorage.getItem(state.private.id)) {
     state = parse(localStorage.getItem(state.private.id))
 }
 
-document.getElementById("toolbar-container").style.display = "flex"
-if (shared && !state.private.key) { // if shared but no write-key 
-    quillOptions.readOnly = true
-    quillOptions.placeholder = ''
-    var sheet = window.document.styleSheets[0];
-    sheet.insertRule('.ql-editor>*{cursor:default!important}', sheet.cssRules.length);
-    sheet.insertRule('hr.divider{display:none}', sheet.cssRules.length);
-    document.getElementById("toolbar-container").style.display = "none"
-} else {}
 
-var quill = new Quill('#editor-container', quillOptions)
+
+if (shared && !state.private.key) { // if shared but no write-key 
+    quill.disable()
+
+    // add class "readonly" to content-container         .classList.add("readonly")
+ 
+    /* var sheet = window.document.styleSheets[0];
+    sheet.insertRule('.ql-editor>*{cursor:default!important}', sheet.cssRules.length);
+    sheet.insertRule('hr.divider{display:none}', sheet.cssRules.length); */
+    
+} else {
+    document.getElementById("toolbar-container").style.display = ""
+}
+
+
 
 
 if (!localStorage.getItem(state.private.id)) {
