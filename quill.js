@@ -82,7 +82,6 @@ function setRemoteData(changesToUpload) {
         if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) return // empty delta
         if (!state.private.key) return
 
-        console.log(1234)
         data = {
             delta: JSON.stringify(changesToUpload)
         }
