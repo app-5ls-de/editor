@@ -65,7 +65,7 @@ layout: bare
 
         <span class="ql-formats">
             <button class="ql-list" value="ordered" title="Ordered List"></button>
-            <button class="ql-list" value="bullet"  title="Unordered List"></button>
+            <button class="ql-list" value="bullet" title="Unordered List"></button>
         </span>
 
         <span class="ql-formats">
@@ -105,6 +105,10 @@ layout: bare
 <div id="noscript" style="position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; font-size: 2rem;">
     Please activate javascript to use this site
 </div>
+<script>
+    let noscript = document.getElementById("noscript");
+    noscript.parentNode.removeChild(noscript);
+</script>
 <script src="/quill-v1.3.6/quill.js"></script>
 <script src="/ifvisible.js-v1.0.6/ifvisible.js"></script>
 <script src="/main.js"></script>
