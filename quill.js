@@ -1,3 +1,10 @@
+var Delta = Quill.import('delta')
+
+function copyDelta(delta) {
+    if (!delta) return delta
+    return new Delta(JSON.parse(JSON.stringify(delta)))
+}
+
 var jsonboxIdentifier = "7PtWsjtDv4VTB4PStlLF" + "_"
 var state = {
     private: {
