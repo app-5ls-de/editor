@@ -65,6 +65,7 @@
     margin-right: 0 !important;
     margin-top: 0.3rem;
     margin-left: 0.3rem;
+    height: min-content;
 }
 
 @media (pointer: coarse) and (orientation: portrait) {
