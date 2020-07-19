@@ -150,7 +150,7 @@ function share() {
 
 
 function saveToLocalStorage() {
-    if (quill.getText() == "\n") {return}
+    if (!shared && quill.getText() == "\n") {return}
     state.public.content = quill.getContents()
     state.private.LastModified = new Date()
     localStorage.setItem(state.private.id, JSON.stringify(state))
