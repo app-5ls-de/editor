@@ -2,7 +2,7 @@
     "lang" : "en",
     "name" : "Editor",
     "scope" : "/",
-    "display" : "minimal-ui",
+    "display" : "browser",
     "start_url" : "/",
     "short_name" : "Editor",
     "description" : "Editor",
