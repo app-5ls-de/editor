@@ -23,6 +23,22 @@
 
 <body>
     {{content}}
+    <script>
+        if ("serviceWorker" in navigator) {
+            if (navigator.serviceWorker.controller) {
+                console.log("[ServiceWorker] active service worker found");
+            } else {
+                // Register the service worker
+                navigator.serviceWorker
+                    .register("/service-worker.js", {
+                        scope: "/"
+                    })
+                    .then(function (reg) {
+                        console.log('[ServiceWorker] Service worker registered.', reg);
+                    });
+            }
+        }
+    </script>
 </body>
 
 </html>
