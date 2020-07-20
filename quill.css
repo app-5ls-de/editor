@@ -47,6 +47,8 @@
 
 #editor-container {
     padding: 3rem;
+    width: min-content;
+    min-width: 100%;
 }
 
 .footer svg{
