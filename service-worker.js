@@ -1,4 +1,4 @@
-const CACHE = "static-cache-v1.4.0";
+const CACHE = "static-cache-v1.5.0";
 const precacheFiles = [
   '/',
   '/index.html',
@@ -24,7 +24,15 @@ const precacheFiles = [
   '/logo512px.png',
   '/logo192px.png',
   '/favicon-16x16.png',
-  '/favicon-32x32.png'
+  '/favicon-32x32.png',
+  '/fonts/open-sans-v17-latin-regular.woff2',
+  '/fonts/open-sans-v17-latin-regular.woff',
+  '/fonts/open-sans-v17-latin-italic.woff2',
+  '/fonts/open-sans-v17-latin-italic.woff',
+  '/fonts/open-sans-v17-latin-700.woff2',
+  '/fonts/open-sans-v17-latin-700.woff',
+  '/fonts/open-sans-v17-latin-700italic.woff2',
+  '/fonts/open-sans-v17-latin-700italic.woff'
 ];
 
 
