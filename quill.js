@@ -182,6 +182,22 @@ let quillOptions = {
 }
 var quill = new Quill('#editor-container', quillOptions)
 
+
+let button = document.getElementById("emoji-button")
+let toolbar = document.getElementById("toolbar-container")
+const picker = new EmojiButton({
+    'position': 'bottom-end'
+})
+var emoji_selection
+picker.on('emoji', emoji => {
+    quill.insertText(emoji_selection.index, emoji)
+})
+button.addEventListener('click', () => {
+    emoji_selection = quill.getSelection(false)
+    picker.togglePicker(toolbar);
+})
+
+
 if (shared) {
     const params = new URL(location.href).searchParams
     state.private.id = params.get('id')
