@@ -186,14 +186,22 @@ var quill = new Quill('#editor-container', quillOptions)
 let button = document.getElementById("emoji-button")
 let toolbar = document.getElementById("toolbar-container")
 const picker = new EmojiButton({
-    'position': 'bottom-end'
+    'position': 'bottom-end',
+    'autoHide': false,
+    'autoFocusSearch': false
 })
-var emoji_selection
+var last_selection
+quill.on('selection-change', function(range, oldRange, source) {
+    if (range) {
+        last_selection = range
+    }
+})
+
 picker.on('emoji', emoji => {
-    quill.insertText(emoji_selection.index, emoji)
+    quill.insertText(last_selection.index, emoji)
+    last_selection.index = last_selection.index + 2
 })
 button.addEventListener('click', () => {
-    emoji_selection = quill.getSelection(false)
     picker.togglePicker(toolbar);
 })
 
