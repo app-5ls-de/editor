@@ -1,8 +1,9 @@
 ---
 layout: bare
 ---
+<div id="main-content" class="readonly">
 <div id="content-container">
-    <div id="toolbar-container" style="display: none;">
+    <div id="toolbar-container">
 
         <span class="ql-formats">
             <button class="ql-home" title="Home">
@@ -86,8 +87,10 @@ layout: bare
     </div>
     <div id="editor-container"></div>
 </div>
+<div class="footer"><a href="/">Home</a></div>
 <div id="noscript" style="position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; font-size: 2rem;">
     Please activate javascript to use this site
+</div>
 </div>
 <script>
     let noscript = document.getElementById("noscript");

@@ -200,15 +200,10 @@ if (localStorage.getItem(state.private.id)) {
 
 if (shared && !state.private.key) { // if shared but no write-key 
     quill.disable()
-
-    // add class "readonly" to content-container         .classList.add("readonly")
- 
-    /* var sheet = window.document.styleSheets[0];
-    sheet.insertRule('.ql-editor>*{cursor:default!important}', sheet.cssRules.length);
-    sheet.insertRule('hr.divider{display:none}', sheet.cssRules.length); */
-    
 } else {
-    document.getElementById("toolbar-container").style.display = ""
+    let element=document.getElementById("main-content")
+    element.classList.remove("readonly")
+    element.classList.add("readwrite")
 }
 
 

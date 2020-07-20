@@ -51,12 +51,35 @@
 }
 
 #content-container {
+    min-height: 100%;
+}
+
+#main-content.readonly .ql-blank::before {
+    display: none;
+}
+
+#main-content.readonly #toolbar-container {
+    display: none;
+}
+
+#main-content.readonly .ql-editor>*{ 
+    cursor: default !important;
+}
+
+
+
+#main-content.readwrite .footer {
+    display: none;
+}
+
+#main-content.readwrite #content-container {
     padding-top: 3rem;
 }
 
 @media print {
     #toolbar-container,
-    .ql-blank::before {
+    .ql-blank::before,
+    .footer {
         display: none !important;
     }
 
