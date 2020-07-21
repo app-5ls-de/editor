@@ -183,9 +183,8 @@ let quillOptions = {
 var quill = new Quill('#editor-container', quillOptions)
 
 
-let button = document.getElementById("emoji-button")
 let toolbar = document.getElementById("toolbar-container")
-const picker = new EmojiButton({
+var emoji_picker = new EmojiButton({
     'position': 'bottom-end',
     'autoHide': false,
     'autoFocusSearch': false
@@ -197,14 +196,94 @@ quill.on('selection-change', function(range, oldRange, source) {
     }
 })
 
-picker.on('emoji', emoji => {
+emoji_picker.on('emoji', emoji => {
     quill.insertText(last_selection.index, emoji)
     last_selection.index = last_selection.index + 2
 })
-button.addEventListener('click', () => {
-    picker.togglePicker(toolbar);
+document.getElementById("emoji-button").addEventListener('click', () => {
+    emoji_picker.togglePicker(toolbar);
 })
 
+
+var color_picker = {}
+
+color_picker.pickr = Pickr.create({
+    el: '#color-picker',
+    useAsButton: true,
+    theme: 'nano',
+    position: 'bottom-middle',
+    adjustableNumbers: false,
+    padding: 8,
+    
+    swatches: [
+        '#001f3f',
+        '#0074D9',
+        '#7FDBFF',
+        '#39CCCC',
+        '#3D9970',
+        '#2ECC40',
+        '#01FF70',
+        '#FFDC00',
+        '#FF851B',
+        '#FF4136',
+        '#85144b',
+        '#F012BE',
+        '#B10DC9',
+        '#111111',
+        '#AAAAAA',
+        '#DDDDDD',
+        '#FFFFFF'
+    ],
+    
+    components: {
+        preview: true,
+        lockOpacity: true,
+        hue: true,
+        interaction: {
+            input: true
+        }
+    }
+})
+
+
+
+color_picker.pickr.on('save', (color, instance) => {
+    ColorPickrSet(instance)
+}).on('changestop', instance => {
+    ColorPickrSet(instance)
+}).on('swatchselect', (color, instance) => {
+    ColorPickrSet(instance)
+})
+
+
+color_picker.pickr.on('init', instance => {
+    const {result} = instance.getRoot().interaction;
+    result.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            instance.applyColor();
+            instance.hide(); 
+        }
+    }, {capture: true});
+})
+
+function ColorPickrButtonPress(){
+    color_picker.id = this.id
+    color_picker.pickr.show()
+}
+
+function ColorPickrSet(instance){
+    let hex = instance._color.toHEXA().toString()
+    let format
+    if (color_picker.id == "background-color") {
+        format = "background"
+    } else if (color_picker.id == "font-color") {
+        format = "color"
+    } else return
+    quill.format(format, hex);
+}
+
+document.getElementById("font-color").onclick = ColorPickrButtonPress
+document.getElementById("background-color").onclick = ColorPickrButtonPress
 
 if (shared) {
     const params = new URL(location.href).searchParams

@@ -1,4 +1,4 @@
-const CACHE = "static-cache-v1.6.1";
+const CACHE = "static-cache-v1.7.0";
 const precacheFiles = [
   '/',
   '/index.html',
@@ -8,7 +8,9 @@ const precacheFiles = [
   '/quill-v1.3.6/quill.snow.css',
   '/normalize.css-v8.0.1/normalize.min.css',
   '/ifvisible.js-v1.0.6/ifvisible.js',
-  'emoji-button-v3.1.1/emoji-button.min.js',
+  '/emoji-button-v3.1.1/emoji-button.min.js',
+  '/pickr-v1.7.2/nano.min.css',
+  '/pickr-v1.7.2/pickr.min.js',
   '/local',
   '/shared',
   '/new',
