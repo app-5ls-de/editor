@@ -93,6 +93,9 @@
     cursor: default !important;
 }
 
+#main-content.readonly #editor-container {	
+    min-height: 100vh;	
+}
 
 
 #main-content.readwrite .footer {
