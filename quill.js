@@ -197,8 +197,9 @@ quill.on('selection-change', function(range, oldRange, source) {
 })
 
 emoji_picker.on('emoji', emoji => {
-    quill.insertText(last_selection.index, emoji)
-    last_selection.index = last_selection.index + 2
+    quill.deleteText(last_selection)
+    let delta = quill.insertText(last_selection.index, emoji)
+    quill.setSelection(delta.transformPosition(last_selection.index), 0);
 })
 document.getElementById("emoji-button").addEventListener('click', () => {
     emoji_picker.togglePicker(toolbar);
