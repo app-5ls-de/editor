@@ -104,6 +104,7 @@ button#color-picker {
 
 #main-content.readwrite #content-container {
     padding-top: 3rem;
+    padding-bottom: 100vh;
 }
 
 @media print {
