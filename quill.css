@@ -77,13 +77,6 @@ button#color-picker {
   display: inline-block;
 }
 
-
-#main-content,
-#content-container,
-#editor-container {
-    min-height: 100vh;
-}
-
 #main-content.readonly .ql-blank::before {
     display: none;
 }
