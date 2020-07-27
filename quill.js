@@ -208,8 +208,7 @@ document.getElementById("emoji-button").addEventListener('click', () => {
 
 var color_picker = {}
 
-color_picker.pickr = Pickr.create({
-    el: '#color-picker',
+color_picker.options = {
     useAsButton: true,
     theme: 'nano',
     position: 'bottom-middle',
@@ -244,44 +243,44 @@ color_picker.pickr = Pickr.create({
             input: true
         }
     }
-})
+}
 
 
 
-color_picker.pickr.on('save', (color, instance) => {
-    ColorPickrSet(instance)
-}).on('changestop', instance => {
-    ColorPickrSet(instance)
-}).on('swatchselect', (color, instance) => {
-    ColorPickrSet(instance)
-})
 
-
-color_picker.pickr.on('init', instance => {
-    const {result} = instance.getRoot().interaction;
-    result.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-            instance.applyColor();
-            instance.hide(); 
-        }
-    }, {capture: true});
-})
 
 function ColorPickrButtonPress(){
     color_picker.id = this.id
+    color_picker.options.el = '#' + this.id
+
+    color_picker.pickr = Pickr.create(color_picker.options)
+
+    color_picker.pickr.on('save', (color, instance) => {
+        ColorPickrSet(instance)
+    }).on('changestop', instance => {
+        ColorPickrSet(instance)
+    }).on('swatchselect', (color, instance) => {
+        ColorPickrSet(instance)
+    }).on('hide', (color, instance) => {
+        instance.destroyAndRemove()
+    })
+
+
     color_picker.pickr.show()
+
+
+    function ColorPickrSet(instance){
+        let hex = instance._color.toHEXA().toString()
+        let format
+        if (color_picker.id == "background-color") {
+            format = "background"
+        } else if (color_picker.id == "font-color") {
+            format = "color"
+        } else return
+        quill.format(format, hex);
+    }
 }
 
-function ColorPickrSet(instance){
-    let hex = instance._color.toHEXA().toString()
-    let format
-    if (color_picker.id == "background-color") {
-        format = "background"
-    } else if (color_picker.id == "font-color") {
-        format = "color"
-    } else return
-    quill.format(format, hex);
-}
 
 document.getElementById("font-color").onclick = ColorPickrButtonPress
 document.getElementById("background-color").onclick = ColorPickrButtonPress

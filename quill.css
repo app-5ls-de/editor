@@ -51,13 +51,6 @@
     min-width: 100%;
 }
 
-button#color-picker {
-    display: inline;
-    width: 0;
-    padding: 0;
-    margin: 0;
-}
-
 .footer svg{
     height: 2rem;
     width: 2rem;
