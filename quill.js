@@ -168,9 +168,6 @@ let quillOptions = {
                 },
                 'redo': function() {
                     quill.history.redo()
-                },
-                'home': function(){
-                    location.href = location.origin
                 }
             }
         },
