@@ -1,4 +1,6 @@
-const CACHE = "static-cache-v1.7.0";
+---
+---
+const CACHE = "static-cache-{{ "now" | date: "%s"}}";
 const precacheFiles = [
   '/',
   '/index.html',
