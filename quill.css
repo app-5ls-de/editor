@@ -115,7 +115,7 @@
     }
 
     #content-container {
-        padding-top: 0;
+        padding: 0 !important;
     }
 }
 
