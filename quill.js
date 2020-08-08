@@ -199,9 +199,7 @@ emoji_picker.on('emoji', emoji => {
     let delta = quill.insertText(last_selection.index, emoji)
     quill.setSelection(delta.transformPosition(last_selection.index), 0);
 })
-document.getElementById("emoji-button").addEventListener('click', () => {
-    emoji_picker.togglePicker(toolbar);
-})
+document.getElementById("emoji-button").addEventListener('click', () => { emoji_picker.togglePicker(toolbar) })
 
 
 var color_picker = {}
@@ -279,9 +277,8 @@ function ColorPickrButtonPress(){
     }
 }
 
-
-document.getElementById("font-color").onclick = ColorPickrButtonPress
-document.getElementById("background-color").onclick = ColorPickrButtonPress
+document.getElementById("font-color").addEventListener('click', () => { ColorPickrButtonPress() })
+document.getElementById("background-color").addEventListener('click', () => { ColorPickrButtonPress() })
 
 if (shared) {
     const params = new URL(location.href).searchParams
