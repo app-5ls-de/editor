@@ -63,7 +63,13 @@ layout: bare
                 localStorage.removeItem(key);
                 location.reload();
             }
-            a.innerHTML = element.private.id
+
+            if (element.private.title) {
+                a.innerHTML = element.private.title
+            } else {
+                a.innerHTML = element.private.id
+            }
+            
             a.href = location.origin + "/shared?id=" + element.private.id
             li.append(a)
             li.append(button)
