@@ -23,6 +23,21 @@ layout: bare
 <h1>New</h1>
 <a href="/new?auto">create new share</a>
 <script>
+    var list = document.getElementById("list")
+
+    function rename(id) {
+        console.log(id)
+        let element = JSON.parse(localStorage[id])
+        let title = element.private.title
+        if (!title) title = element.private.id
+        var newTitle = prompt("Please enter the new title:", element.private.id)
+        if (newTitle != null && newTitle != "") {
+            element.private.title = newTitle
+            localStorage.setItem(id, JSON.stringify(element))
+            document.getElementById(id).firstElementChild.innerText = newTitle
+        }
+    }
+
     if (localStorage.hasOwnProperty("local") && localStorage.local) {
         let button = document.createElement("button")
         button.innerHTML = "X"
@@ -56,12 +71,18 @@ layout: bare
 
             let li = document.createElement("li")
             let a = document.createElement("a")
-            let button = document.createElement("button")
+            let button_delete = document.createElement("button")
+            let button_rename = document.createElement("button")
 
-            button.innerHTML = "X"
-            button.onclick = function () {
+            button_delete.innerHTML = "X"
+            button_delete.onclick = function () {
                 localStorage.removeItem(key);
                 location.reload();
+            }
+
+            button_rename.innerHTML = "R"
+            button_rename.onclick = function () {
+                rename(element.private.id)
             }
 
             if (element.private.title) {
@@ -69,11 +90,14 @@ layout: bare
             } else {
                 a.innerHTML = element.private.id
             }
-            
+
+            li.id = element.private.id
+
             a.href = location.origin + "/shared?id=" + element.private.id
             li.append(a)
-            li.append(button)
-            document.getElementById("list").append(li)
+            li.append(button_rename)
+            li.append(button_delete)
+            list.append(li)
 
         }
     }
