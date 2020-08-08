@@ -47,8 +47,9 @@ function getRemoteData() {
                     //console.log("should now apply changes: ", response)
                     let remoteChange = new Delta()
                     for (let i = 0; i < response.length; i++) {
+                        if (!response[i].type || response[i].type == "delta") {
                         remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
-                        //quill.updateContents(JSON.parse(response[i].delta), 'silent')
+                    }
                     }
 
                     if (localChange) {
@@ -83,6 +84,7 @@ function setRemoteData(changesToUpload) {
         if (!state.private.key) return
 
         data = {
+            type: "delta",
             delta: JSON.stringify(changesToUpload)
         }
         if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
