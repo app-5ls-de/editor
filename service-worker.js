@@ -20,6 +20,8 @@ const precacheFiles = [
   '/main.js',
   '/quill.js',
   '/quill.css',
+  '/pencil.svg',
+  '/delete.svg',
   '/logo16px.png',
   '/logo24px.png',
   '/logo32px.png',
