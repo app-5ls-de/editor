@@ -302,6 +302,11 @@ if (shared) {
     }
     
     window.history.replaceState({}, document.title, "/?id=" + state.private.id );
+} else {
+    if (localStorage.getItem(state.private.id)) {
+        state = parse(localStorage.getItem(state.private.id))
+    }
+}
 }
 
 
