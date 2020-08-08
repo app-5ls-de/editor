@@ -5,7 +5,7 @@ function copyDelta(delta) {
     return new Delta(JSON.parse(JSON.stringify(delta)))
 }
 
-var jsonboxIdentifier = "7PtWsjtDv4VTB4PStlLF" + "_"
+var jsonboxIdentifier = "imANthQVo4v4WZaGnpoC" + "_"
 var state = {
     private: {
         key: undefined,
@@ -300,7 +300,7 @@ if (shared) {
     if (isvalid_uuid(key)) {
         state.private.key = key        
     }
-    
+
     if (key){
         window.history.replaceState({}, document.title, "/shared?id=" + state.private.id );
     }
