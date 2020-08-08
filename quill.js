@@ -48,8 +48,8 @@ function getRemoteData() {
                     let remoteChange = new Delta()
                     for (let i = 0; i < response.length; i++) {
                         if (!response[i].type || response[i].type == "delta") {
-                        remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
-                    }
+                            remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
+                        }
                     }
 
                     if (localChange) {
@@ -285,17 +285,23 @@ document.getElementById("background-color").addEventListener('click', () => { Co
 if (shared) {
     const params = new URL(location.href).searchParams
     state.private.id = params.get('id')
-    state.private.key = params.get('pwd')
-    if (!state.private.id || state.private.id.length < 20) {
-        window.location.href = window.location.origin
+    
+    if (!isvalid_boxid(state.private.id)) {
+        localStorage.removeItem(state.private.id)
+        window.location.href = window.location.origin + "?error=invalidId"
     }
+
+    if (localStorage.getItem(state.private.id)) {
+        state = parse(localStorage.getItem(state.private.id))
+    }
+
+    let key = params.get('pwd')
+    if (isvalid_uuid(key)) {
+        state.private.key = key        
+    }
+    
+    window.history.replaceState({}, document.title, "/?id=" + state.private.id );
 }
-
-
-if (localStorage.getItem(state.private.id)) {
-    state = parse(localStorage.getItem(state.private.id))
-}
-
 
 
 if (shared && !state.private.key) { // if shared but no write-key 
