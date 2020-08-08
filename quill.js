@@ -179,6 +179,7 @@ let quillOptions = {
 }
 var quill = new Quill('#editor-container', quillOptions)
 
+document.getElementById("print-button").addEventListener('click', () => { window.print() })
 
 let toolbar = document.getElementById("toolbar-container")
 var emoji_picker = new EmojiButton({
