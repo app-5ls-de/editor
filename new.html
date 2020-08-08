@@ -23,7 +23,20 @@ layout: bare
 
     const params = new URL(location.href).searchParams
     if (params.get('auto') != null) {
-        let title = createRandomWord(6)
-        window.location.href = window.location.origin + "/shared?id=" + random_boxid() + "&pwd=" + random_uuid()
+        var state = {
+            private: {
+                key: random_uuid(),
+                id: random_boxid(),
+                LastModified: new Date(),
+                title: createRandomWord(6)
+            },
+            public: {
+                content: undefined
+            }
+        }
+
+        localStorage.setItem(state.private.id, JSON.stringify(state))
+
+        window.location.href = window.location.origin + "/shared?id=" + state.private.id
     }
 </script>
