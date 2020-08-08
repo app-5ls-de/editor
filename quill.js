@@ -11,7 +11,8 @@ var state = {
         key: undefined,
         id: "local",
         LastSyncedId: undefined,
-        changeSinceLastUpload: undefined
+        changeSinceLastUpload: undefined,
+        title: undefined
     },
     public: {
         content: undefined
