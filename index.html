@@ -6,14 +6,21 @@ layout: bare
 <h1>Shared</h1>
 <div style="padding-left: 2rem;">
     <style>
-        button {
-            /* float: right;
-            margin-right: 70%; */
+        button:first-of-type {
             margin-left: 2rem;
+        }
+
+        button {
+            padding: 0;
+            margin-right: 5px;
         }
 
         li {
             height: 2rem;
+        }
+
+        object {
+            width: 1rem;
         }
     </style>
     <ul id="list">
@@ -70,13 +77,13 @@ layout: bare
             let button_delete = document.createElement("button")
             let button_rename = document.createElement("button")
 
-            button_delete.innerHTML = "X"
+            button_delete.innerHTML = "<object data='/delete.svg' type='image/svg+xml'></object>"
             button_delete.onclick = function () {
                 localStorage.removeItem(key);
                 location.reload();
             }
 
-            button_rename.innerHTML = "R"
+            button_rename.innerHTML = "<object data='/pencil.svg' type='image/svg+xml'></object>"
             button_rename.onclick = function () {
                 rename(element.private.id)
             }
