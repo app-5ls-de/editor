@@ -307,6 +307,11 @@ if (shared) {
         state = parse(localStorage.getItem(state.private.id))
     }
 }
+
+if (state.private.title) {
+    window.document.title += ' | ' + state.private.title
+} else {
+    window.document.title += ' | ' + state.private.id
 }
 
 
