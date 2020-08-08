@@ -301,7 +301,9 @@ if (shared) {
         state.private.key = key        
     }
     
-    window.history.replaceState({}, document.title, "/?id=" + state.private.id );
+    if (key){
+        window.history.replaceState({}, document.title, "/shared?id=" + state.private.id );
+    }
 } else {
     if (localStorage.getItem(state.private.id)) {
         state = parse(localStorage.getItem(state.private.id))
