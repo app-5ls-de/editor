@@ -33,8 +33,8 @@ layout: bare
             border: 1px solid #ccc;
         }
     </style>
-    <ul id="list">
-    </ul>
+    <div id="list">
+    </div>
 </div>
 <hr>
 <h1>New</h1>
@@ -56,7 +56,7 @@ layout: bare
     }
 
     function createElement(element) {
-        let li = document.createElement("li")
+        let div = document.createElement("div")
         let a = document.createElement("a")
         let span = document.createElement("span")
         let button_delete = document.createElement("button")
@@ -79,14 +79,14 @@ layout: bare
             a.innerHTML = element.private.id
         }
 
-        li.id = element.private.id
+        div.id = element.private.id
 
         a.href = location.origin + "/shared?id=" + element.private.id
-        li.append(a)
+        div.append(a)
         span.append(button_rename)
         span.append(button_delete)
-        li.append(span)
-        return li
+        div.append(span)
+        return div
     }
 
     if (localStorage.hasOwnProperty("local") && localStorage.local) {
