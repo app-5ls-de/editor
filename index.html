@@ -6,21 +6,31 @@ layout: bare
 <h1>Shared</h1>
 <div style="padding-left: 2rem;">
     <style>
-        button:first-of-type {
-            margin-left: 2rem;
-        }
-
         button {
             padding: 0;
-            margin-right: 5px;
+            background: 0 0;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            height: 24px;
+            padding: 3px 5px;
+            width: 28px;
         }
 
         li {
             height: 2rem;
         }
 
-        object {
+        svg {
             width: 1rem;
+        }
+
+        span {
+            margin-left: 10vw;
+            display: inline-block;
+            vertical-align: middle;
+            height: min-content;
+            border: 1px solid #ccc;
         }
     </style>
     <ul id="list">
@@ -48,6 +58,7 @@ layout: bare
     function createElement(element) {
         let li = document.createElement("li")
         let a = document.createElement("a")
+        let span = document.createElement("span")
         let button_delete = document.createElement("button")
         let button_rename = document.createElement("button")
 
@@ -72,8 +83,9 @@ layout: bare
 
         a.href = location.origin + "/shared?id=" + element.private.id
         li.append(a)
-        li.append(button_rename)
-        li.append(button_delete)
+        span.append(button_rename)
+        span.append(button_delete)
+        li.append(span)
         return li
     }
 
