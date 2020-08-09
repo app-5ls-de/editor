@@ -67,7 +67,7 @@ layout: bare
                 continue
             }
             console.log(element)
-            if (!element || !element.private || !element.private.id) {
+            if (!element || !element.private || !element.private.id || key != element.private.id) {
                 localStorage.removeItem(key)
                 continue
             }
