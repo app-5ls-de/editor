@@ -45,6 +45,38 @@ layout: bare
         }
     }
 
+    function createElement(element) {
+        let li = document.createElement("li")
+        let a = document.createElement("a")
+        let button_delete = document.createElement("button")
+        let button_rename = document.createElement("button")
+
+        button_delete.innerHTML = "<object data='/delete.svg' type='image/svg+xml'></object>"
+        button_delete.onclick = function () {
+            localStorage.removeItem(element.private.id);
+            location.reload();
+        }
+
+        button_rename.innerHTML = "<object data='/pencil.svg' type='image/svg+xml'></object>"
+        button_rename.onclick = function () {
+            rename(element.private.id)
+        }
+
+        if (element.private.title) {
+            a.innerHTML = element.private.title
+        } else {
+            a.innerHTML = element.private.id
+        }
+
+        li.id = element.private.id
+
+        a.href = location.origin + "/shared?id=" + element.private.id
+        li.append(a)
+        li.append(button_rename)
+        li.append(button_delete)
+        return li
+    }
+
     if (localStorage.hasOwnProperty("local") && localStorage.local) {
         let button = document.createElement("button")
         button.innerHTML = "X"
@@ -72,35 +104,8 @@ layout: bare
                 continue
             }
 
-            let li = document.createElement("li")
-            let a = document.createElement("a")
-            let button_delete = document.createElement("button")
-            let button_rename = document.createElement("button")
 
-            button_delete.innerHTML = "<object data='/delete.svg' type='image/svg+xml'></object>"
-            button_delete.onclick = function () {
-                localStorage.removeItem(key);
-                location.reload();
-            }
-
-            button_rename.innerHTML = "<object data='/pencil.svg' type='image/svg+xml'></object>"
-            button_rename.onclick = function () {
-                rename(element.private.id)
-            }
-
-            if (element.private.title) {
-                a.innerHTML = element.private.title
-            } else {
-                a.innerHTML = element.private.id
-            }
-
-            li.id = element.private.id
-
-            a.href = location.origin + "/shared?id=" + element.private.id
-            li.append(a)
-            li.append(button_rename)
-            li.append(button_delete)
-            list.append(li)
+            list.append(createElement(element))
 
         }
     }
