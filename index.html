@@ -124,6 +124,15 @@ layout: bare
         button_delete.onclick = function () {
             localStorage.removeItem(element.private.id)
             document.getElementById(element.private.id).remove()
+
+            /* 
+            TODO: before delete make svg red with 
+             
+                background: red;
+                border-radius: 50%;
+            
+            and on second click delete
+            */
         }
 
         let title = window.document.title
