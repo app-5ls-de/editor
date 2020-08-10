@@ -204,7 +204,9 @@ layout: bare
         span.append(button_rename)
         span.append(button_delete)
         span.append(button_share_ro)
+        if (element.private.key) {
         span.append(button_share_rw)
+        }
         div.append(span)
         div.append(span_copied)
         return div
