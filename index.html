@@ -110,7 +110,7 @@ layout: bare
         let element = JSON.parse(localStorage[id])
         let title = element.private.title
         if (!title) title = element.private.id
-        var newTitle = prompt("Please enter the new title:", element.private.id)
+        var newTitle = prompt("Please enter the new title:", title)
         if (newTitle != null && newTitle != "") {
             element.private.title = newTitle
             localStorage.setItem(id, JSON.stringify(element))
