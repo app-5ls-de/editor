@@ -106,7 +106,6 @@ layout: bare
     }
 
     function rename(id) {
-        console.log(id)
         let element = JSON.parse(localStorage[id])
         let title = element.private.title
         if (!title) title = element.private.id
@@ -188,7 +187,7 @@ layout: bare
         }
         button_share_rw.innerHTML = '<svg viewBox="0 0 485 485"><path d="M222.5,175v-72.5C222.5,45.981,176.519,0,120,0S17.5,45.981,17.5,102.5V190h30v-87.5C47.5,62.523,80.023,30,120,30 s72.5,32.523,72.5,72.5V175h-70v310h345V175H222.5z M437.5,455h-285V205h285V455z"/><g transform="matrix(.41136 0 0 .41136 205.67 235.67)"><path d="m339.59 314.53c-14.215 0-27.456 4.133-38.621 11.239l-112.68-78.67c1.809-6.315 2.798-12.976 2.798-19.871 0-6.896-.989-13.557-2.798-19.871l109.64-76.547c11.764 8.356 26.133 13.286 41.662 13.286 39.79 0 72.047-32.257 72.047-72.047s-32.256-72.048-72.046-72.048-72.047 32.257-72.047 72.047c0 5.255.578 10.373 1.646 15.308l-112.42 78.491c-10.974-6.759-23.892-10.666-37.727-10.666-39.79 0-72.047 32.257-72.047 72.047s32.256 72.047 72.047 72.047c13.834 0 26.753-3.907 37.727-10.666l113.29 79.097c-1.629 6.017-2.514 12.34-2.514 18.872 0 39.79 32.257 72.047 72.047 72.047s72.047-32.257 72.047-72.047-32.257-72.048-72.047-72.048z"/></g></svg>'
         button_share_rw.onclick = function () {
-            share(location.origin + "/shared?id=" + element.private.id + "&key=" + element.private.key, title, span_copied)
+            share(location.origin + "/shared?id=" + element.private.id + "&pwd=" + element.private.key, title, span_copied)
         }
 
         if (element.private.title) {
@@ -244,11 +243,10 @@ layout: bare
             try {
                 element = JSON.parse(localStorage[key])
             } catch (error) {
-                //console.log(error)
+                console.log(error)
                 localStorage.removeItem(key)
                 continue
             }
-            console.log(element)
             if (!element || !element.private || !element.private.id || key != element.private.id) {
                 localStorage.removeItem(key)
                 continue
