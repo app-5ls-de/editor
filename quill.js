@@ -140,12 +140,12 @@ function saveToLocalStorage() {
     state.private.LastModified = undefined
 }
 
+var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
+var synchronizeHandler = throttle(synchronize, 1000 * 10)
+
 //#endregion functions
 
 //#region setup
-
-var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
-var synchronizeHandler = throttle(synchronize, 1000 * 10)
 
 
 ifvisible.onEvery(15, synchronizeHandler) // If page is visible run this function on every 15 seconds
