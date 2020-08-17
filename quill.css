@@ -46,6 +46,10 @@
     border: 1px solid #ccc;
 }
 
+.ql-formats.without-border{
+    border: none;
+}
+
 #toolbar-container > .spacer{
     margin: auto;
     display: inline-block;
