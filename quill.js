@@ -1,22 +1,9 @@
+//#region functions
 var Delta = Quill.import('delta')
 
 function copyDelta(delta) {
     if (!delta) return delta
     return new Delta(JSON.parse(JSON.stringify(delta)))
-}
-
-var jsonboxIdentifier = "imANthQVo4v4WZaGnpoC" + "_"
-var state = {
-    private: {
-        key: undefined,
-        id: "local",
-        LastSyncedId: undefined,
-        changeSinceLastUpload: undefined,
-        title: undefined
-    },
-    public: {
-        content: undefined
-    }
 }
 
 
@@ -153,6 +140,9 @@ function saveToLocalStorage() {
     state.private.LastModified = undefined
 }
 
+//#endregion functions
+
+//#region setup
 
 var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
 var synchronizeHandler = throttle(synchronize, 1000 * 10)
@@ -283,6 +273,36 @@ function ColorPickrButtonPress(){
 document.getElementById("font-color").addEventListener('click', ColorPickrButtonPress)
 document.getElementById("background-color").addEventListener('click', ColorPickrButtonPress)
 
+quill.on('text-change', function(delta) {
+    if (shared) {
+        if (!state.private.changeSinceLastUpload) {
+            state.private.changeSinceLastUpload = new Delta()
+        }
+        state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
+    }
+    saveToLocalStorageHandler()
+    synchronizeHandler()
+})
+
+//#endregion setup
+
+//#region init
+
+var jsonboxIdentifier = "imANthQVo4v4WZaGnpoC" + "_"
+var state = {
+    private: {
+        key: undefined,
+        id: "local",
+        LastSyncedId: undefined,
+        changeSinceLastUpload: undefined,
+        title: undefined
+    },
+    public: {
+        content: undefined
+    }
+}
+
+
 if (shared) {
     const params = new URL(location.href).searchParams
     state.private.id = params.get('id')
@@ -339,14 +359,4 @@ if (state.public.content) {
 if (shared) synchronize()
 
 
-
-quill.on('text-change', function(delta) {
-    if (shared) {
-        if (!state.private.changeSinceLastUpload) {
-            state.private.changeSinceLastUpload = new Delta()
-        }
-        state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
-    }
-    saveToLocalStorageHandler()
-    synchronizeHandler()
-})
+//#endregion init
