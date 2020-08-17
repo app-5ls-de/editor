@@ -141,14 +141,30 @@ function saveToLocalStorage() {
 }
 
 var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
-var synchronizeHandler = throttle(synchronize, 1000 * 10)
+
+ifvisible.setIdleDuration(30)
+var syncronizeInterval
+
+ifvisible.idle(function() {
+    clearInterval(syncronizeInterval)
+    syncronizeInterval = null
+});
+
+ifvisible.wakeup(function() {
+    synchronize()
+    if (syncronizeInterval) {
+        clearInterval(syncronizeInterval)
+        syncronizeInterval = null
+    }
+
+    syncronizeInterval = setInterval(synchronize, 15 * 1000) // If page is visible run this function on every 15 seconds
+});
+
+ifvisible.wakeup()
 
 //#endregion functions
 
 //#region setup
-
-
-ifvisible.onEvery(15, synchronizeHandler) // If page is visible run this function on every 15 seconds
 
 
 let quillOptions = {
