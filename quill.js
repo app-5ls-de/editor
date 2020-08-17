@@ -307,7 +307,7 @@ quill.on('text-change', function(delta) {
     synchronizeHandler()
 })
 
-document.getElementById("sync-button").addEventListener('click', () => { synchronizeThrottled() })
+document.getElementById("sync-button").addEventListener('click', () => { ifvisible.wakeup() })
 
 //#endregion setup
 
