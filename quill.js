@@ -140,7 +140,7 @@ function saveToLocalStorage() {
     state.private.LastModified = undefined
 }
 
-var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
+var saveToLocalStorageThrottled = throttle(saveToLocalStorage, 1000 * 1)
 var synchronizeThrottled = throttle(synchronize, 1000 * 1)
 
 ifvisible.setIdleDuration(30)
@@ -303,7 +303,7 @@ quill.on('text-change', function(delta) {
         }
         state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
     }
-    saveToLocalStorageHandler()
+    saveToLocalStorageThrottled()
     synchronizeHandler()
 })
 
