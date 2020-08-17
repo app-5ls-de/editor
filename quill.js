@@ -161,8 +161,6 @@ ifvisible.wakeup(function() {
     synchronizeInterval = setInterval(synchronize, 15 * 1000) // If page is visible run this function on every 15 seconds
 });
 
-ifvisible.wakeup()
-
 //#endregion functions
 
 //#region setup
@@ -379,7 +377,8 @@ if (!localStorage.getItem(state.private.id)) {
 if (state.public.content) {
     quill.setContents(state.public.content, 'silent')
 }
-if (shared) synchronize()
+
+ifvisible.wakeup()
 
 
 //#endregion init
