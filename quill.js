@@ -114,9 +114,11 @@ function setRemoteData(changesToUpload) {
     }
 }
 
-
+var syncIsActive = false
 function synchronize() {
-    getRemoteData()
+    if (shared && !syncIsActive) {
+        getRemoteData()
+    }
 }
 
 
@@ -140,15 +142,58 @@ function saveToLocalStorage() {
     state.private.LastModified = undefined
 }
 
-var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
-var synchronizeHandler = throttle(synchronize, 1000 * 10)
+var saveToLocalStorageThrottled = throttle(saveToLocalStorage, 1000 * 1)
+var synchronizeThrottled = throttle(synchronize, 1000 * 1)
 
+ifvisible.setIdleDuration(30)
+var synchronizeInterval
+
+ifvisible.idle(function() {
+    clearInterval(synchronizeInterval)
+    synchronizeInterval = null
+});
+
+ifvisible.wakeup(function() {
+    synchronizeThrottled()
+    if (synchronizeInterval) {
+        clearInterval(synchronizeInterval)
+        synchronizeInterval = null
+    }
+
+    synchronizeInterval = setInterval(synchronizeThrottled, 15 * 1000) // If page is visible run this function on every 15 seconds
+});
+
+var syncStatusIndicator = {
+    button: document.getElementById("sync-button"),
+    status: "neutral",
+    set: function(newStatus) {
+        if (this.status == newStatus) return
+        
+        if (this.status == "running") {
+            syncStatusIndicator.button.classList.remove("spin")
+        }
+        
+        if (newStatus == "success") {
+            syncStatusIndicator.button.style.fill = "forestgreen"        
+        } else if (newStatus == "error") {
+            syncStatusIndicator.button.style.fill = "red"
+        } else if (newStatus == "running") {
+            syncStatusIndicator.button.style.fill = "black"
+            syncStatusIndicator.button.classList.add("spin")
+        } else if (newStatus == "neutral") {
+            syncStatusIndicator.button.style.fill = "black"
+        } else {
+            console.error("unkown status:" + newStatus)
+            return
+        }
+        
+        this.status = newStatus
+    }
+}
+    
 //#endregion functions
 
 //#region setup
-
-
-ifvisible.onEvery(15, synchronizeHandler) // If page is visible run this function on every 15 seconds
 
 
 let quillOptions = {
@@ -286,9 +331,11 @@ quill.on('text-change', function(delta) {
         }
         state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
     }
-    saveToLocalStorageHandler()
+    saveToLocalStorageThrottled()
     synchronizeHandler()
 })
+
+document.getElementById("sync-button").addEventListener('click', () => { ifvisible.wakeup() })
 
 //#endregion setup
 
@@ -362,7 +409,8 @@ if (!localStorage.getItem(state.private.id)) {
 if (state.public.content) {
     quill.setContents(state.public.content, 'silent')
 }
-if (shared) synchronize()
+
+ifvisible.wakeup()
 
 
 //#endregion init
