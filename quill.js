@@ -165,6 +165,10 @@ ifvisible.wakeup(function() {
 
 var syncStatus = {
     button: document.getElementById("sync-button"),
+    isReady: function () {
+        if (this.status == "neutral" || this.status == "success") return true
+        return false
+    },
     status: "neutral",
     set: function(newStatus) {
         if (this.status == newStatus) return
