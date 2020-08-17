@@ -160,7 +160,7 @@ ifvisible.wakeup(function() {
         synchronizeInterval = null
     }
 
-    synchronizeInterval = setInterval(synchronize, 15 * 1000) // If page is visible run this function on every 15 seconds
+    synchronizeInterval = setInterval(synchronizeThrottled, 15 * 1000) // If page is visible run this function on every 15 seconds
 });
 
 //#endregion functions
