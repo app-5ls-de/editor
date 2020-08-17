@@ -1,6 +1,6 @@
 ---
 ---
-const CACHE = "static-cache-{{ "now" | date: "%s"}}";
+const CACHE = "static-cache-{% if JEKYLL_ENV == development %}{{ "now" | date: "%Y%m%d"}}{% else %}{{ "now" | date: "%s"}}{% endif %}";
 const precacheFiles = [
   '/',
   '/index.html',
