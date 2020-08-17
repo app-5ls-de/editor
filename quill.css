@@ -53,7 +53,7 @@
 #toolbar-container > .spacer{
     margin: auto;
     display: inline-block;
-    width: 2rem;
+    width: 3rem;
 }
 
 #editor-container .ql-editor {
