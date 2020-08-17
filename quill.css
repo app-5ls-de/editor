@@ -182,3 +182,8 @@
 .ql-editor li.ql-indent-9:not(.ql-direction-rtl){
     padding-left:19m
 }
+
+.ql-snow.ql-toolbar a:hover .ql-fill, .ql-snow .ql-toolbar a:hover .ql-fill, .ql-snow.ql-toolbar a:focus .ql-fill, .ql-snow .ql-toolbar a:focus .ql-fill, .ql-snow.ql-toolbar a:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar a:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar a:focus .ql-stroke.ql-fill, .ql-snow .ql-toolbar a:focus .ql-stroke.ql-fill {
+    fill: #06c;
+}
+
