@@ -143,21 +143,21 @@ function saveToLocalStorage() {
 var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
 
 ifvisible.setIdleDuration(30)
-var syncronizeInterval
+var synchronizeInterval
 
 ifvisible.idle(function() {
-    clearInterval(syncronizeInterval)
-    syncronizeInterval = null
+    clearInterval(synchronizeInterval)
+    synchronizeInterval = null
 });
 
 ifvisible.wakeup(function() {
     synchronize()
-    if (syncronizeInterval) {
-        clearInterval(syncronizeInterval)
-        syncronizeInterval = null
+    if (synchronizeInterval) {
+        clearInterval(synchronizeInterval)
+        synchronizeInterval = null
     }
 
-    syncronizeInterval = setInterval(synchronize, 15 * 1000) // If page is visible run this function on every 15 seconds
+    synchronizeInterval = setInterval(synchronize, 15 * 1000) // If page is visible run this function on every 15 seconds
 });
 
 ifvisible.wakeup()
