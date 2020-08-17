@@ -170,18 +170,18 @@ var syncStatusIndicator = {
         if (this.status == newStatus) return
         
         if (this.status == "running") {
-            syncStatusIndicator.button.classList.remove("spin")
+            this.button.classList.remove("spin")
         }
         
         if (newStatus == "success") {
-            syncStatusIndicator.button.style.fill = "forestgreen"        
+            this.button.style.fill = "forestgreen"        
         } else if (newStatus == "error") {
-            syncStatusIndicator.button.style.fill = "red"
+            this.button.style.fill = "red"
         } else if (newStatus == "running") {
-            syncStatusIndicator.button.style.fill = "black"
-            syncStatusIndicator.button.classList.add("spin")
+            this.button.style.fill = "black"
+            this.button.classList.add("spin")
         } else if (newStatus == "neutral") {
-            syncStatusIndicator.button.style.fill = "black"
+            this.button.style.fill = "black"
         } else {
             console.error("unkown status:" + newStatus)
             return
