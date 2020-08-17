@@ -172,27 +172,9 @@ var syncStatus = {
     status: "neutral",
     set: function(newStatus) {
         if (this.status == newStatus) return
-        
-        if (this.status == "running") {
-            this.button.classList.remove("spin")
-        }
 
-        if (this.status == "offline") {
-            this.button.classList.remove("offline")
-        }
-        
-        if (newStatus == "success") {
-            this.button.style.fill = "forestgreen"        
-        } else if (newStatus == "error") {
-            this.button.style.fill = "red"
-        } else if (newStatus == "running") {
-            this.button.style.fill = "black"
-            this.button.classList.add("spin")
-        } else if (newStatus == "neutral") {
-            this.button.style.fill = "black"
-        } else if (newStatus == "offline") {
-            this.button.style.fill = "dimgray"
-            this.button.classList.add("offline")
+        if (["neutral", "success", "error", "running", "offline"].includes(newStatus)){
+            this.button.classList = newStatus
         } else {
             console.error("unkown status:" + newStatus)
             return
