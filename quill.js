@@ -176,6 +176,10 @@ var syncStatus = {
         if (this.status == "running") {
             this.button.classList.remove("spin")
         }
+
+        if (this.status == "offline") {
+            this.button.classList.remove("offline")
+        }
         
         if (newStatus == "success") {
             this.button.style.fill = "forestgreen"        
@@ -186,6 +190,9 @@ var syncStatus = {
             this.button.classList.add("spin")
         } else if (newStatus == "neutral") {
             this.button.style.fill = "black"
+        } else if (newStatus == "offline") {
+            this.button.style.fill = "dimgray"
+            this.button.classList.add("offline")
         } else {
             console.error("unkown status:" + newStatus)
             return

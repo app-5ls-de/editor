@@ -193,6 +193,14 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 }
+
+#sync-button.offline .bar {
+    opacity: 1;
+}
+
+#sync-button .bar {
+    opacity: 0;
+}
   
 @keyframes spin {
     from {
