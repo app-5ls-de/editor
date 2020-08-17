@@ -163,7 +163,7 @@ ifvisible.wakeup(function() {
     synchronizeInterval = setInterval(synchronizeThrottled, 15 * 1000) // If page is visible run this function on every 15 seconds
 });
 
-var syncStatusIndicator = {
+var syncStatus = {
     button: document.getElementById("sync-button"),
     status: "neutral",
     set: function(newStatus) {
