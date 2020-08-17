@@ -180,17 +180,21 @@ var emoji_picker = new EmojiButton({
     'autoHide': false,
     'autoFocusSearch': false
 })
-var last_selection
-quill.on('selection-change', function(range, oldRange, source) {
-    if (range) {
-        last_selection = range
+
+var LastSelection = { index: 0, length: 0 }
+quill.on('editor-change', (eventName, range, oldRange, source) => {
+    if (eventName === 'selection-change') {
+        if (range) {
+            LastSelection = range
+        }
     }
 })
 
 function insertText(text) {
-    quill.deleteText(last_selection)
-    let delta = quill.insertText(last_selection.index, text)
-    quill.setSelection(delta.transformPosition(last_selection.index), 0);
+    quill.deleteText(LastSelection)
+    let Selection = LastSelection // after quill.insertText 'editor-change' is emited -> save selection to transform with delta
+    let delta = quill.insertText(LastSelection.index, text)
+    quill.setSelection(delta.transformPosition(Selection.index), 0)
 }
 
 emoji_picker.on('emoji', insertText)
