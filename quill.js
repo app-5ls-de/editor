@@ -114,9 +114,11 @@ function setRemoteData(changesToUpload) {
     }
 }
 
-
+var syncIsActive = false
 function synchronize() {
-    getRemoteData()
+    if (shared && !syncIsActive) {
+        getRemoteData()
+    }
 }
 
 
