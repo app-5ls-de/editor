@@ -141,6 +141,7 @@ function saveToLocalStorage() {
 }
 
 var saveToLocalStorageHandler = throttle(saveToLocalStorage, 1000 * 1)
+var synchronizeThrottled = throttle(synchronize, 1000 * 1)
 
 ifvisible.setIdleDuration(30)
 var synchronizeInterval
@@ -151,7 +152,7 @@ ifvisible.idle(function() {
 });
 
 ifvisible.wakeup(function() {
-    synchronize()
+    synchronizeThrottled()
     if (synchronizeInterval) {
         clearInterval(synchronizeInterval)
         synchronizeInterval = null
