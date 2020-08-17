@@ -163,25 +163,18 @@ ifvisible.wakeup(function() {
     synchronizeInterval = setInterval(synchronizeThrottled, 15 * 1000) // If page is visible run this function on every 15 seconds
 });
 
-var syncStatusIndicator = {
+var syncStatus = {
     button: document.getElementById("sync-button"),
+    isReady: function () {
+        if (this.status == "neutral" || this.status == "success") return true
+        return false
+    },
     status: "neutral",
     set: function(newStatus) {
         if (this.status == newStatus) return
-        
-        if (this.status == "running") {
-            syncStatusIndicator.button.classList.remove("spin")
-        }
-        
-        if (newStatus == "success") {
-            syncStatusIndicator.button.style.fill = "forestgreen"        
-        } else if (newStatus == "error") {
-            syncStatusIndicator.button.style.fill = "red"
-        } else if (newStatus == "running") {
-            syncStatusIndicator.button.style.fill = "black"
-            syncStatusIndicator.button.classList.add("spin")
-        } else if (newStatus == "neutral") {
-            syncStatusIndicator.button.style.fill = "black"
+
+        if (["neutral", "success", "error", "running", "offline"].includes(newStatus)){
+            this.button.classList = newStatus
         } else {
             console.error("unkown status:" + newStatus)
             return

@@ -46,10 +46,14 @@
     border: 1px solid #ccc;
 }
 
+.ql-formats.without-border{
+    border: none;
+}
+
 #toolbar-container > .spacer{
     margin: auto;
     display: inline-block;
-    width: 2rem;
+    width: 3rem;
 }
 
 #editor-container .ql-editor {
@@ -187,18 +191,46 @@
     fill: #06c;
 }
 
-#sync-button.spin {
+#sync-button,
+#sync-button.runnning,
+#sync-button.neutral {
+    fill: black;
+}
+
+#sync-button.error {
+    fill: red;
+}
+
+#sync-button.offline {
+    fill: dimgray;
+}
+
+#sync-button.success {
+    fill: forestgreen;
+}
+
+#sync-button .bar {
+    opacity: 0;
+    stroke: red;
+    stroke-width: 3;
+}
+
+#sync-button.offline .bar {
+    opacity: 1;
+}
+
+#sync-button.running {
     animation-name: spin;
     animation-duration: 4000ms;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-  }
-  
-  @keyframes spin {
-      from {
-          transform:rotate(0deg);
-      }
-      to {
-          transform:rotate(360deg);
-      }
-  }
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
