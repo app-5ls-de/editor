@@ -36,14 +36,14 @@ function getRemoteData(callback) {
 function setRemoteData(changesToUpload,callback) {
         if (!changesToUpload) {
             if (!state.private.changeSinceLastUpload) {
-                syncStatus.set("neutral")
+                syncStatus.set("success")
                 return //nothing to do
             }
             changesToUpload = copyDelta(state.private.changeSinceLastUpload)
             state.private.changeSinceLastUpload = null
         }
         if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())){
-            syncStatus.set("neutral")
+            syncStatus.set("success")
             return // empty delta
         }
         if (!state.private.key) {
@@ -124,7 +124,7 @@ function synchronize() {
             setRemoteData(localChange, (data) => {
                 state.private.LastSyncedId = data.id
                 saveToLocalStorage()
-                syncStatus.set("neutral")
+                syncStatus.set("success")
             })
         })
     }
@@ -370,6 +370,7 @@ document.getElementById("font-color").addEventListener('click', ColorPickrButton
 document.getElementById("background-color").addEventListener('click', ColorPickrButtonPress)
 
 quill.on('text-change', function(delta) {
+    syncStatus.set("neutral")
     if (shared) {
         if (!state.private.changeSinceLastUpload) {
             state.private.changeSinceLastUpload = new Delta()
