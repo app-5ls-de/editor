@@ -50,6 +50,10 @@
     border: none;
 }
 
+.ql-formats.no-focus>button:focus{
+    outline: none;
+}
+
 #toolbar-container > .spacer{
     margin: auto;
     display: inline-block;
