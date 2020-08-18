@@ -325,7 +325,6 @@ quill.on('text-change', function(delta) {
         state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
     }
     saveToLocalStorageThrottled()
-    synchronizeHandler()
 })
 
 document.getElementById("sync-button").addEventListener('click', () => { ifvisible.wakeup() })
