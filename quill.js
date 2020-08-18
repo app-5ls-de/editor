@@ -173,13 +173,12 @@ var syncStatus = {
     set: function(newStatus) {
         if (this.status == newStatus) return
 
-        if (["neutral", "success", "error", "running", "offline"].includes(newStatus)){
-            this.button.classList = newStatus
-        } else {
+        if (!["neutral", "success", "error", "running", "offline"].includes(newStatus)){
             console.error("unkown status:" + newStatus)
             return
         }
         
+        this.button.classList = newStatus
         this.status = newStatus
     }
 }
