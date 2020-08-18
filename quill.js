@@ -93,18 +93,15 @@ function setRemoteData(changesToUpload,callback) {
 
 function synchronize() {
     if (shared && syncStatus.isReady()) {
-        console.log("sync")
         syncStatus.set("running")
 
         localChange = copyDelta(state.private.changeSinceLastUpload)
         state.private.changeSinceLastUpload = null
         getRemoteData((data) => {
             response = data
-            //console.log('Request succeeded with JSON response', response)
             let changesToUpload = localChange
 
             if (response.length > 0) {
-                //console.log("should now apply changes: ", response)
                 let remoteChange = new Delta()
                 for (let i = 0; i < response.length; i++) {
                     if (!response[i].type || response[i].type == "delta") {
