@@ -196,48 +196,48 @@ var syncStatus = {
     }
 }
     
+if (shared) {
+    window.addEventListener('online', handleConnection);
+    window.addEventListener('offline', handleConnection);
+    handleConnection()
+    function handleConnection() { // https://stackoverflow.com/a/44766737
+        function isReachable() {
+            /**
+             * Note: fetch() still "succeeds" for 404s on subdirectories,
+             * which is ok when only testing for domain reachability.
+             *
+             * Example:
+             *   https://google.com/noexist does not throw
+             *   https://noexist.com/noexist does throw
+             */
+            return fetch("https://detectportal.firefox.com/success.txt", { method: 'HEAD', mode: 'no-cors' })
+                .then(function(resp) {
+                    return resp && (resp.ok || resp.type === 'opaque');
+                })
+                .catch(function(err) {
+                    console.warn('[conn test failure]:', err);
+                    syncStatus.set("offline")
+                });
+        }
 
-window.addEventListener('online', handleConnection);
-window.addEventListener('offline', handleConnection);
-handleConnection()
-function handleConnection() { // https://stackoverflow.com/a/44766737
-    function isReachable() {
-        /**
-         * Note: fetch() still "succeeds" for 404s on subdirectories,
-         * which is ok when only testing for domain reachability.
-         *
-         * Example:
-         *   https://google.com/noexist does not throw
-         *   https://noexist.com/noexist does throw
-         */
-        return fetch("https://detectportal.firefox.com/success.txt", { method: 'HEAD', mode: 'no-cors' })
-            .then(function(resp) {
-                return resp && (resp.ok || resp.type === 'opaque');
-            })
-            .catch(function(err) {
-                console.warn('[conn test failure]:', err);
-                syncStatus.set("offline")
+        if (navigator.onLine) {
+            isReachable().then(function(online) {
+                if (online) {
+                    // handle online status
+                    console.log('online');
+                    syncStatus.set("neutral")
+                } else {
+                    console.log('no connectivity');
+                    syncStatus.set("offline")
+                }
             });
-    }
-
-    if (navigator.onLine) {
-        isReachable().then(function(online) {
-            if (online) {
-                // handle online status
-                console.log('online');
-                syncStatus.set("neutral")
-            } else {
-                console.log('no connectivity');
-                syncStatus.set("offline")
-            }
-        });
-    } else {
-        // handle offline status
-        console.log('offline');
-        syncStatus.set("offline")
+        } else {
+            // handle offline status
+            console.log('offline');
+            syncStatus.set("offline")
+        }
     }
 }
-
     
 //#endregion functions
 
