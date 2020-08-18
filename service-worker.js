@@ -75,7 +75,7 @@ self.addEventListener("activate", function (event) {
 self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
   if (event.request.url.startsWith("https://jsonbox.io/")) return;
-  if (event.request.url == "http://detectportal.firefox.com/success.txt") return;
+  if (event.request.url == "https://detectportal.firefox.com/success.txt") return;
 
   event.respondWith(
     fromCache(event.request).then(

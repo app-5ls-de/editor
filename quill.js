@@ -210,7 +210,7 @@ function handleConnection() { // https://stackoverflow.com/a/44766737
          *   https://google.com/noexist does not throw
          *   https://noexist.com/noexist does throw
          */
-        return fetch("http://detectportal.firefox.com/success.txt", { method: 'HEAD', mode: 'no-cors' })
+        return fetch("https://detectportal.firefox.com/success.txt", { method: 'HEAD', mode: 'no-cors' })
             .then(function(resp) {
                 return resp && (resp.ok || resp.type === 'opaque');
             })
