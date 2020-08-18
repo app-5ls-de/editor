@@ -7,10 +7,7 @@ function copyDelta(delta) {
 }
 
 
-function getRemoteData() {
-    if (shared) {
-        localChange = copyDelta(state.private.changeSinceLastUpload)
-        state.private.changeSinceLastUpload = null
+function getRemoteData(callback) {
         let sortQuery = ""
         if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
             sortQuery = "&q=id:>" + state.private.LastSyncedId
@@ -27,49 +24,32 @@ function getRemoteData() {
             .then((response) => {
                 return response.json()
             })
-            .then(function(response) {
-                //console.log('Request succeeded with JSON response', response)
-                let changesToUpload = localChange
-
-                if (response.length > 0) {
-                    //console.log("should now apply changes: ", response)
-                    let remoteChange = new Delta()
-                    for (let i = 0; i < response.length; i++) {
-                        if (!response[i].type || response[i].type == "delta") {
-                            remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
-                        }
-                    }
-
-                    if (localChange) {
-                        let remoteChangeTransformed = localChange.transform(remoteChange)
-                        quill.updateContents(remoteChangeTransformed, 'silent')
-
-                        changesToUpload = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
-                    } else {
-                        quill.updateContents(remoteChange, 'silent')
-                    }
-
-                    state.private.LastSyncedId = response[response.length - 1].id
-                    saveToLocalStorage()
-                }
-                setRemoteData(changesToUpload)
-            }).catch(function(error) {
+            .then(callback)
+            .catch((error) => {
                 console.log('Request failed', error)
+                syncStatus.set("error")
                 state.private.changeSinceLastUpload = localChange.compose(state.private.changeSinceLastUpload)
             })
-    }
 }
 
 
-function setRemoteData(changesToUpload) {
-    if (shared) {
+function setRemoteData(changesToUpload,callback) {
         if (!changesToUpload) {
-            if (!state.private.changeSinceLastUpload) return //nothing to do
+            if (!state.private.changeSinceLastUpload) {
+                syncStatus.set("neutral")
+                return //nothing to do
+            }
             changesToUpload = copyDelta(state.private.changeSinceLastUpload)
             state.private.changeSinceLastUpload = null
         }
-        if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) return // empty delta
-        if (!state.private.key) return
+        if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())){
+            syncStatus.set("neutral")
+            return // empty delta
+        }
+        if (!state.private.key) {
+            syncStatus.set("error")
+            return 
+        }
 
         data = {
             type: "delta",
@@ -102,22 +82,55 @@ function setRemoteData(changesToUpload) {
             .then((response) => {
                 return response.json()
             })
-            .then(function(response) {
-                //console.log('Request succeeded with JSON response', response)
-                state.private.LastSyncedId = data.id
-                /* state.private.changeSinceLastUpload = null */
-                saveToLocalStorage()
-            }).catch(function(error) {
+            .then(callback)
+            .catch((error) => { 
                 console.log('Request failed', error)
+                syncStatus.set("error")
                 state.private.changeSinceLastUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
-            })
-    }
+        })
 }
 
-var syncIsActive = false
+
 function synchronize() {
-    if (shared && !syncIsActive) {
-        getRemoteData()
+    if (shared && syncStatus.isReady()) {
+        console.log("sync")
+        syncStatus.set("running")
+
+        localChange = copyDelta(state.private.changeSinceLastUpload)
+        state.private.changeSinceLastUpload = null
+        getRemoteData((data) => {
+            response = data
+            //console.log('Request succeeded with JSON response', response)
+            let changesToUpload = localChange
+
+            if (response.length > 0) {
+                //console.log("should now apply changes: ", response)
+                let remoteChange = new Delta()
+                for (let i = 0; i < response.length; i++) {
+                    if (!response[i].type || response[i].type == "delta") {
+                        remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
+                    }
+                }
+
+                if (localChange) {
+                    let remoteChangeTransformed = localChange.transform(remoteChange)
+                    quill.updateContents(remoteChangeTransformed, 'silent')
+
+                    changesToUpload = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
+                } else {
+                    quill.updateContents(remoteChange, 'silent')
+                }
+
+                state.private.LastSyncedId = response[response.length - 1].id
+                saveToLocalStorage()
+            }
+            
+            setRemoteData(changesToUpload, (data) => {
+                state.private.LastSyncedId = data.id
+                saveToLocalStorage()
+                syncStatus.set("neutral")
+            })
+        })
     }
 }
 
