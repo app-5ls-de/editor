@@ -7,10 +7,7 @@ function copyDelta(delta) {
 }
 
 
-function getRemoteData() {
-    if (shared) {
-        localChange = copyDelta(state.private.changeSinceLastUpload)
-        state.private.changeSinceLastUpload = null
+function getRemoteData(callback) {
         let sortQuery = ""
         if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
             sortQuery = "&q=id:>" + state.private.LastSyncedId
@@ -27,49 +24,32 @@ function getRemoteData() {
             .then((response) => {
                 return response.json()
             })
-            .then(function(response) {
-                //console.log('Request succeeded with JSON response', response)
-                let changesToUpload = localChange
-
-                if (response.length > 0) {
-                    //console.log("should now apply changes: ", response)
-                    let remoteChange = new Delta()
-                    for (let i = 0; i < response.length; i++) {
-                        if (!response[i].type || response[i].type == "delta") {
-                            remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
-                        }
-                    }
-
-                    if (localChange) {
-                        let remoteChangeTransformed = localChange.transform(remoteChange)
-                        quill.updateContents(remoteChangeTransformed, 'silent')
-
-                        changesToUpload = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
-                    } else {
-                        quill.updateContents(remoteChange, 'silent')
-                    }
-
-                    state.private.LastSyncedId = response[response.length - 1].id
-                    saveToLocalStorage()
-                }
-                setRemoteData(changesToUpload)
-            }).catch(function(error) {
+            .then(callback)
+            .catch((error) => {
                 console.log('Request failed', error)
+                syncStatus.set("error")
                 state.private.changeSinceLastUpload = localChange.compose(state.private.changeSinceLastUpload)
             })
-    }
 }
 
 
-function setRemoteData(changesToUpload) {
-    if (shared) {
+function setRemoteData(changesToUpload,callback) {
         if (!changesToUpload) {
-            if (!state.private.changeSinceLastUpload) return //nothing to do
+            if (!state.private.changeSinceLastUpload) {
+                syncStatus.set("neutral")
+                return //nothing to do
+            }
             changesToUpload = copyDelta(state.private.changeSinceLastUpload)
             state.private.changeSinceLastUpload = null
         }
-        if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) return // empty delta
-        if (!state.private.key) return
+        if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())){
+            syncStatus.set("neutral")
+            return // empty delta
+        }
+        if (!state.private.key) {
+            syncStatus.set("error")
+            return 
+        }
 
         data = {
             type: "delta",
@@ -102,22 +82,55 @@ function setRemoteData(changesToUpload) {
             .then((response) => {
                 return response.json()
             })
-            .then(function(response) {
-                //console.log('Request succeeded with JSON response', response)
-                state.private.LastSyncedId = data.id
-                /* state.private.changeSinceLastUpload = null */
-                saveToLocalStorage()
-            }).catch(function(error) {
+            .then(callback)
+            .catch((error) => { 
                 console.log('Request failed', error)
+                syncStatus.set("error")
                 state.private.changeSinceLastUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
-            })
-    }
+        })
 }
 
-var syncIsActive = false
+
 function synchronize() {
-    if (shared && !syncIsActive) {
-        getRemoteData()
+    if (shared && syncStatus.isReady()) {
+        console.log("sync")
+        syncStatus.set("running")
+
+        localChange = copyDelta(state.private.changeSinceLastUpload)
+        state.private.changeSinceLastUpload = null
+        getRemoteData((data) => {
+            response = data
+            //console.log('Request succeeded with JSON response', response)
+            let changesToUpload = localChange
+
+            if (response.length > 0) {
+                //console.log("should now apply changes: ", response)
+                let remoteChange = new Delta()
+                for (let i = 0; i < response.length; i++) {
+                    if (!response[i].type || response[i].type == "delta") {
+                        remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
+                    }
+                }
+
+                if (localChange) {
+                    let remoteChangeTransformed = localChange.transform(remoteChange)
+                    quill.updateContents(remoteChangeTransformed, 'silent')
+
+                    changesToUpload = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
+                } else {
+                    quill.updateContents(remoteChange, 'silent')
+                }
+
+                state.private.LastSyncedId = response[response.length - 1].id
+                saveToLocalStorage()
+            }
+            
+            setRemoteData(changesToUpload, (data) => {
+                state.private.LastSyncedId = data.id
+                saveToLocalStorage()
+                syncStatus.set("neutral")
+            })
+        })
     }
 }
 
@@ -160,7 +173,7 @@ ifvisible.wakeup(function() {
         synchronizeInterval = null
     }
 
-    synchronizeInterval = setInterval(synchronizeThrottled, 15 * 1000) // If page is visible run this function on every 15 seconds
+    synchronizeInterval = setInterval(synchronizeThrottled, 30 * 1000) // If page is visible run this function on every 30 seconds
 });
 
 var syncStatus = {
@@ -173,16 +186,58 @@ var syncStatus = {
     set: function(newStatus) {
         if (this.status == newStatus) return
 
-        if (["neutral", "success", "error", "running", "offline"].includes(newStatus)){
-            this.button.classList = newStatus
-        } else {
+        if (!["neutral", "success", "error", "running", "offline"].includes(newStatus)){
             console.error("unkown status:" + newStatus)
             return
         }
         
+        this.button.classList = newStatus
         this.status = newStatus
     }
 }
+    
+
+window.addEventListener('online', handleConnection);
+window.addEventListener('offline', handleConnection);
+handleConnection()
+function handleConnection() { // https://stackoverflow.com/a/44766737
+    function isReachable() {
+        /**
+         * Note: fetch() still "succeeds" for 404s on subdirectories,
+         * which is ok when only testing for domain reachability.
+         *
+         * Example:
+         *   https://google.com/noexist does not throw
+         *   https://noexist.com/noexist does throw
+         */
+        return fetch("http://detectportal.firefox.com/success.txt", { method: 'HEAD', mode: 'no-cors' })
+            .then(function(resp) {
+                return resp && (resp.ok || resp.type === 'opaque');
+            })
+            .catch(function(err) {
+                console.warn('[conn test failure]:', err);
+                syncStatus.set("offline")
+            });
+    }
+
+    if (navigator.onLine) {
+        isReachable().then(function(online) {
+            if (online) {
+                // handle online status
+                console.log('online');
+                syncStatus.set("neutral")
+            } else {
+                console.log('no connectivity');
+                syncStatus.set("offline")
+            }
+        });
+    } else {
+        // handle offline status
+        console.log('offline');
+        syncStatus.set("offline")
+    }
+}
+
     
 //#endregion functions
 
@@ -325,7 +380,6 @@ quill.on('text-change', function(delta) {
         state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
     }
     saveToLocalStorageThrottled()
-    synchronizeHandler()
 })
 
 document.getElementById("sync-button").addEventListener('click', () => { ifvisible.wakeup() })
