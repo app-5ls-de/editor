@@ -428,6 +428,7 @@ if (shared) {
     if (localStorage.getItem(state.private.id)) {
         state = parse(localStorage.getItem(state.private.id))
     }
+    syncStatus.button.style.display = "none"
 }
 
 if (state.private.title) {
