@@ -99,7 +99,6 @@ function synchronize() {
         state.private.changeSinceLastUpload = null
         getRemoteData((data) => {
             response = data
-            let changesToUpload = localChange
 
             if (response.length > 0) {
                 let remoteChange = new Delta()
@@ -113,7 +112,7 @@ function synchronize() {
                     let remoteChangeTransformed = localChange.transform(remoteChange)
                     quill.updateContents(remoteChangeTransformed, 'silent')
 
-                    changesToUpload = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
+                    localChange = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
                 } else {
                     quill.updateContents(remoteChange, 'silent')
                 }
@@ -122,7 +121,7 @@ function synchronize() {
                 saveToLocalStorage()
             }
             
-            setRemoteData(changesToUpload, (data) => {
+            setRemoteData(localChange, (data) => {
                 state.private.LastSyncedId = data.id
                 saveToLocalStorage()
                 syncStatus.set("neutral")
