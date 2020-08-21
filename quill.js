@@ -43,7 +43,11 @@ function setRemoteData(changesToUpload,callback) {
             state.private.changeSinceLastUpload = null
         }
         if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())){
-            syncStatus.set("success")
+            if (state.private.changeSinceLastUpload) {
+                syncStatus.set("neutral")
+            } else {
+                syncStatus.set("success")
+            }
             return // empty delta
         }
         if (!state.private.key) {
@@ -124,7 +128,12 @@ function synchronize() {
             setRemoteData(localChange, (data) => {
                 state.private.LastSyncedId = data.id
                 saveToLocalStorage()
-                syncStatus.set("success")
+
+                if (state.private.changeSinceLastUpload) {
+                    syncStatus.set("neutral")
+                } else {
+                    syncStatus.set("success")
+                }
             })
         })
     }
