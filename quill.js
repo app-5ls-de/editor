@@ -390,7 +390,10 @@ quill.on('text-change', function(delta) {
     saveToLocalStorageThrottled()
 })
 
-document.getElementById("sync-button").addEventListener('click', () => { ifvisible.wakeup() })
+document.getElementById("sync-button").addEventListener('click', () => { 
+    ifvisible.wakeup() 
+    if (syncStatus.isReady()) syncStatus.set("neutral")
+})
 
 //#endregion setup
 
