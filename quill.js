@@ -222,6 +222,7 @@ if (shared) {
                 if (online) {
                     // handle online status
                     console.log('online');
+                    ifvisible.wakeup()
                     syncStatus.set("neutral")
                 } else {
                     console.log('no connectivity');
