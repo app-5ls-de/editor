@@ -5,12 +5,13 @@ layout: bare
 <script>
     const params = new URL(location.href).searchParams
     if (params.get('auto') != null) {
+        let newID = random_boxid()
         var state = {
             private: {
                 key: random_uuid(),
-                id: random_boxid(),
+                id: newID,
                 LastModified: new Date(),
-                title: createRandomWord(6, this.id)
+                title: createRandomWord(6, newID)
             },
             public: {
                 content: undefined
