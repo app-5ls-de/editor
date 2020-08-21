@@ -61,11 +61,23 @@ function throttle(callback, delay) {
     return throttledEventHandler
 }
 
-function createRandomWord(length) { //https://jsfiddle.net/amando96/XjUJM/
+function createRandomWord(length, seed) { //https://jsfiddle.net/amando96/XjUJM/
+    function mulberry32(a) { //https://github.com/bryc/code/blob/master/jshash/PRNGs.md#mulberry32
+        return function() {
+          a |= 0; a = a + 0x6D2B79F5 | 0;
+          var t = Math.imul(a ^ a >>> 15, 1 | a);
+          t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        }
+    }
+
+    if (!seed) seed = Math.random()
+    let generator = mulberry32(seed)
+
     var consonants = 'bcdfghjlmnpqrstv',
         vowels = 'aeiou',
         rand = function (limit) {
-            return Math.floor(Math.random() * limit);
+            return Math.floor(generator() * limit);
         },
         i, word = '', length = parseInt(length, 10),
         consonants = consonants.split(''),

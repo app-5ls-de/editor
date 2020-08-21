@@ -441,7 +441,7 @@ if (shared && !state.private.key) { // if shared but no write-key
 
 
 if (!localStorage.getItem(state.private.id)) {
-    state.private.title = createRandomWord(6)
+    state.private.title = createRandomWord(6, state.private.id)
     saveToLocalStorage()
 }
 
