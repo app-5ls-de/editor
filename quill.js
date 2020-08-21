@@ -429,12 +429,6 @@ if (shared) {
     syncStatus.button.style.display = "none"
 }
 
-if (state.private.title) {
-    window.document.title += ' | ' + state.private.title
-} else {
-    window.document.title += ' | ' + state.private.id
-}
-
 
 if (shared && !state.private.key) { // if shared but no write-key 
     quill.disable()
@@ -446,9 +440,16 @@ if (shared && !state.private.key) { // if shared but no write-key
 
 
 
-
 if (!localStorage.getItem(state.private.id)) {
+    state.private.title = createRandomWord(6)
     saveToLocalStorage()
+}
+
+
+if (state.private.title) {
+    window.document.title += ' | ' + state.private.title
+} else {
+    window.document.title += ' | ' + state.private.id
 }
 
 
