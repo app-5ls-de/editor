@@ -370,7 +370,7 @@ document.getElementById("font-color").addEventListener('click', ColorPickrButton
 document.getElementById("background-color").addEventListener('click', ColorPickrButtonPress)
 
 quill.on('text-change', function(delta) {
-    syncStatus.set("neutral")
+    if (syncStatus.isReady()) syncStatus.set("neutral")
     if (shared) {
         if (!state.private.changeSinceLastUpload) {
             state.private.changeSinceLastUpload = new Delta()
