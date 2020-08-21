@@ -64,15 +64,25 @@ function throttle(callback, delay) {
 function createRandomWord(length, seed) { //https://jsfiddle.net/amando96/XjUJM/
     function mulberry32(a) { //https://github.com/bryc/code/blob/master/jshash/PRNGs.md#mulberry32
         return function() {
-          a |= 0; a = a + 0x6D2B79F5 | 0;
-          var t = Math.imul(a ^ a >>> 15, 1 | a);
-          t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+            a |= 0; a = a + 0x6D2B79F5 | 0;
+            var t = Math.imul(a ^ a >>> 15, 1 | a);
+            t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
         }
     }
+    function getHash(input){ //https://stackoverflow.com/a/40958826
+        input = new String(input);
+        var hash = 0, len = input.length;
+        for (var i = 0; i < len; i++) {
+          hash  = ((hash << 5) - hash) + input.charCodeAt(i);
+          hash |= 0; // to 32bit integer
+        }
+        return hash;
+    }
+
 
     if (!seed) seed = Math.random()
-    let generator = mulberry32(seed)
+    let generator = mulberry32(getHash(seed))
 
     var consonants = 'bcdfghjlmnpqrstv',
         vowels = 'aeiou',
