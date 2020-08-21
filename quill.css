@@ -64,6 +64,13 @@
     font-size: 1rem;
 }
 
+@media only screen and (min-width: 350px) {
+    #editor-container .ql-editor {
+        word-break: break-word;
+        hyphens: auto;
+    }
+}
+
 #editor-container {
     padding: 3rem;
     width: min-content;
