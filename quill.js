@@ -42,6 +42,12 @@ function setRemoteData(changesToUpload,callback) {
             changesToUpload = copyDelta(state.private.changeSinceLastUpload)
             state.private.changeSinceLastUpload = null
         }
+
+        if (changesToUpload && state.private.changeSinceLastUpload) {
+            changesToUpload = state.private.changeSinceLastUpload.compose(changesToUpload)
+            state.private.changeSinceLastUpload = null
+        }
+
         if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())){
             if (state.private.changeSinceLastUpload) {
                 syncStatus.set("neutral")
