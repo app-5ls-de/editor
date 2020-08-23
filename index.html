@@ -111,9 +111,9 @@ layout: bare
         if (!title) title = element.private.id
         var newTitle = prompt("Please enter the new title:", title)
         if (newTitle != null && newTitle != "") {
-            element.private.title = newTitle
+            element.private.title = newTitle.trim()
             localStorage.setItem(id, JSON.stringify(element))
-            document.getElementById(id).firstElementChild.innerText = newTitle
+            document.getElementById(id).firstElementChild.innerText = element.private.title
         }
     }
 
