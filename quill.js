@@ -213,7 +213,7 @@ if (shared) {
     window.addEventListener('offline', handleConnection);
     handleConnection()
     function handleConnection() { // https://stackoverflow.com/a/44766737
-        function isReachable() {
+        function isReachable(url) {
             /**
              * Note: fetch() still "succeeds" for 404s on subdirectories,
              * which is ok when only testing for domain reachability.
@@ -222,7 +222,7 @@ if (shared) {
              *   https://google.com/noexist does not throw
              *   https://noexist.com/noexist does throw
              */
-            return fetch("https://detectportal.firefox.com/success.txt", { method: 'HEAD', mode: 'no-cors' })
+            return fetch(url, { method: 'HEAD', mode: 'no-cors' })
                 .then(function(resp) {
                     return resp && (resp.ok || resp.type === 'opaque');
                 })
@@ -233,7 +233,7 @@ if (shared) {
         }
 
         if (navigator.onLine) {
-            isReachable().then(function(online) {
+            isReachable("https://detectportal.firefox.com/success.txt").then(function(online) {
                 if (online) {
                     // handle online status
                     console.log('online');
