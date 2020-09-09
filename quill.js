@@ -476,7 +476,5 @@ if (state.public.content) {
     quill.setContents(state.public.content, 'silent')
 }
 
-ifvisible.wakeup()
-
 
 //#endregion init
