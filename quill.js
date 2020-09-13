@@ -233,13 +233,23 @@ if (shared) {
         }
 
         if (navigator.onLine) {
-            isReachable("https://detectportal.firefox.com/success.txt").then(function(online) {
+            isReachable("https://jsonbox.io/connectivitychecking").then(function(online) {
                 if (online) {
                     // handle online status
                     console.log('online');
                     ifvisible.wakeup()
                     syncStatus.set("neutral")
                 } else {
+                    isReachable("https://detectportal.firefox.com/success.txt").then(function(online) {
+                        if (online) {
+                            console.log('error');
+                            syncStatus.set("error")
+                        } else {
+                            console.log('no connectivity');
+                            syncStatus.set("offline")
+                        }
+                    });
+                    
                     console.log('no connectivity');
                     syncStatus.set("offline")
                 }
