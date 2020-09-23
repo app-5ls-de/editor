@@ -110,7 +110,7 @@ function synchronize() {
                 let remoteChange = new Delta()
                 let LastId
                 for (let i = 0; i < data.length; i++) {
-                    if (!data[i].type || data[i].type == "delta") {
+                    if (data[i].type && data[i].type == "delta") {
                         remoteChange = remoteChange.compose(new Delta(JSON.parse(data[i].delta)))
                         LastId = data[i].id
                     }
