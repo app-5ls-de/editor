@@ -41,10 +41,8 @@ function setRemoteData(changesToUpload, callback) {
         }
         changesToUpload = copyDelta(state.private.changeSinceLastUpload)
         state.private.changeSinceLastUpload = null
-    }
-
-    if (changesToUpload && state.private.changeSinceLastUpload) {
-        changesToUpload = state.private.changeSinceLastUpload.compose(changesToUpload)
+    } else if (state.private.changeSinceLastUpload) {
+        changesToUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
         state.private.changeSinceLastUpload = null
     }
 
