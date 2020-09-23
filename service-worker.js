@@ -1,5 +1,5 @@
--- -
--- -
+---
+---
 /* Changed by me */
 const PRECACHE = 'precache-v{{ "now" | date: "%s"}}';
 const RUNTIME = 'runtime';
