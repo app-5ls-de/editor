@@ -108,13 +108,11 @@ function synchronize() {
         localChange = copyDelta(state.private.changeSinceLastUpload)
         state.private.changeSinceLastUpload = null
         getRemoteData((data) => {
-            response = data
-
-            if (response.length > 0) {
+            if (data.length > 0) {
                 let remoteChange = new Delta()
-                for (let i = 0; i < response.length; i++) {
-                    if (!response[i].type || response[i].type == "delta") {
-                        remoteChange = remoteChange.compose(new Delta(JSON.parse(response[i].delta)))
+                for (let i = 0; i < data.length; i++) {
+                    if (!data[i].type || data[i].type == "delta") {
+                        remoteChange = remoteChange.compose(new Delta(JSON.parse(data[i].delta)))
                     }
                 }
 
@@ -127,7 +125,7 @@ function synchronize() {
                     quill.updateContents(remoteChange, 'silent')
                 }
 
-                state.private.LastSyncedId = response[response.length - 1].id
+                state.private.LastSyncedId = data[data.length - 1].id
                 saveToLocalStorage()
             }
 
