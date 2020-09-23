@@ -7,6 +7,7 @@ layout: bare
     if (params.get('auto') != null) {
         let newID = random_boxid()
         var state = {
+            jsonboxIdentifier: jsonboxIdentifier,
             private: {
                 key: random_uuid(),
                 id: newID,

@@ -13,7 +13,7 @@ function getRemoteData(callback) {
         sortQuery = "&q=id:>" + state.private.LastSyncedId
     }
 
-    fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
+    fetch('https://jsonbox.io/' + state.jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
         .then((response) => {
             if (response.ok) {
                 return Promise.resolve(response)
@@ -79,7 +79,7 @@ function setRemoteData(changesToUpload, callback) {
         body: JSON.stringify(data)
     }
 
-    fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id, options)
+    fetch('https://jsonbox.io/' + state.jsonboxIdentifier + state.private.id, options)
         .then((response) => {
             if (response.ok) {
                 return Promise.resolve(response)
@@ -439,7 +439,8 @@ document.onkeydown = function(e) {
 
 var jsonboxIdentifier = "imANthQVo4v4WZaGnpoC" + "_"
 var state = {
-    private: {
+        private: {
+    jsonboxIdentifier: jsonboxIdentifier,
         key: undefined,
         id: "local",
         LastSyncedId: undefined,
