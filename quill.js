@@ -212,55 +212,56 @@ if (shared) {
     window.addEventListener('online', handleConnection);
     window.addEventListener('offline', handleConnection);
     handleConnection()
-    function handleConnection() { // https://stackoverflow.com/a/44766737
-        function isReachable(url) {
-            /**
-             * Note: fetch() still "succeeds" for 404s on subdirectories,
-             * which is ok when only testing for domain reachability.
-             *
-             * Example:
-             *   https://google.com/noexist does not throw
-             *   https://noexist.com/noexist does throw
-             */
-            return fetch(url, { method: 'HEAD', mode: 'no-cors' })
-                .then(function(resp) {
-                    return resp && (resp.ok || resp.type === 'opaque');
-                })
-                .catch(function(err) {
-                    console.warn('[conn test failure]:', err);
-                    syncStatus.set("offline")
-                });
-        }
-
-        if (navigator.onLine) {
-            isReachable("https://jsonbox.io/connectivitychecking").then(function(online) {
-                if (online) {
-                    // handle online status
-                    console.log('online');
-                    ifvisible.wakeup()
-                    syncStatus.set("neutral")
-                } else {
-                    isReachable("https://detectportal.firefox.com/success.txt").then(function(online) {
-                        if (online) {
-                            console.log('error');
-                            syncStatus.set("error")
-                        } else {
-                            console.log('no connectivity');
-                            syncStatus.set("offline")
-                        }
-                    });
-                    
-                    console.log('no connectivity');
-                    syncStatus.set("offline")
-                }
+}
+function handleConnection() { // https://stackoverflow.com/a/44766737
+    function isReachable(url) {
+        /**
+         * Note: fetch() still "succeeds" for 404s on subdirectories,
+         * which is ok when only testing for domain reachability.
+         *
+         * Example:
+         *   https://google.com/noexist does not throw
+         *   https://noexist.com/noexist does throw
+         */
+        return fetch(url, { method: 'HEAD', mode: 'no-cors' })
+            .then(function(resp) {
+                return resp && (resp.ok || resp.type === 'opaque');
+            })
+            .catch(function(err) {
+                console.warn('[conn test failure]:', err);
+                syncStatus.set("offline")
             });
-        } else {
-            // handle offline status
-            console.log('offline');
-            syncStatus.set("offline")
-        }
+    }
+
+    if (navigator.onLine) {
+        isReachable("https://jsonbox.io/connectivitychecking").then(function(online) {
+            if (online) {
+                // handle online status
+                console.log('online');
+                ifvisible.wakeup()
+                syncStatus.set("neutral")
+            } else {
+                isReachable("https://detectportal.firefox.com/success.txt").then(function(online) {
+                    if (online) {
+                        console.log('error');
+                        syncStatus.set("error")
+                    } else {
+                        console.log('no connectivity');
+                        syncStatus.set("offline")
+                    }
+                });
+                
+                console.log('no connectivity');
+                syncStatus.set("offline")
+            }
+        });
+    } else {
+        // handle offline status
+        console.log('offline');
+        syncStatus.set("offline")
     }
 }
+
     
 //#endregion functions
 
