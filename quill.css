@@ -249,6 +249,11 @@
     fill: dimgray;
 }
 
+#sync-button.disabled {
+    fill: none;
+    display: none;
+}
+
 #sync-button.success {
     fill: forestgreen;
 }

@@ -194,11 +194,14 @@ var syncStatus = {
         if (this.status == "neutral" || this.status == "success") return true
         return false
     },
+    isEnabled: function() {
+        return this.status != "disabled"
+    },
     status: "neutral",
     set: function(newStatus) {
         if (this.status == newStatus) return
 
-        if (!["neutral", "success", "error", "running", "offline"].includes(newStatus)) {
+        if (!["neutral", "success", "error", "running", "offline", "disabled"].includes(newStatus)) {
             console.error("unkown status:" + newStatus)
             return
         }
