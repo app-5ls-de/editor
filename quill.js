@@ -208,12 +208,6 @@ var syncStatus = {
     }
 }
 
-if (shared) {
-    window.addEventListener('online', handleConnection);
-    window.addEventListener('offline', handleConnection);
-    handleConnection()
-}
-
 function handleConnection() { // https://stackoverflow.com/a/44766737
     function isReachable(url) {
         /**
@@ -475,6 +469,12 @@ if (shared) {
         state = parse(localStorage.getItem(state.id))
     }
     syncStatus.button.style.display = "none"
+}
+
+if (shared) {
+    window.addEventListener('online', handleConnection);
+    window.addEventListener('offline', handleConnection);
+    handleConnection()
 }
 
 
