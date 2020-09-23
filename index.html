@@ -203,14 +203,17 @@ layout: bare
 
         a.href = location.origin + "/shared?id=" + element.private.id
         div.append(a)
-        span.append(button_rename)
-        span.append(button_delete)
-        span.append(button_share_ro)
+        if (!element.disabled) {
+            span.append(button_rename)
+            span.append(button_share_ro)
         if (element.private.key) {
-            span.append(button_share_rw)
+                span.append(button_share_rw)
+            }
         }
         div.append(span)
         div.append(span_copied)
+
+        span.append(button_delete)
         return div
     }
 
@@ -254,6 +257,11 @@ layout: bare
             if (!element || !element.private || !element.private.id || key != element.private.id) {
                 localStorage.removeItem(key)
                 continue
+            }
+
+            if (!element.jsonboxIdentifier || element.jsonboxIdentifier != jsonboxIdentifier) {
+                element.key = null
+                element.disabled = true
             }
 
 
