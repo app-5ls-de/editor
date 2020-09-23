@@ -110,9 +110,11 @@ function synchronize() {
         getRemoteData((data) => {
             if (data.length > 0) {
                 let remoteChange = new Delta()
+                let LastId
                 for (let i = 0; i < data.length; i++) {
                     if (!data[i].type || data[i].type == "delta") {
                         remoteChange = remoteChange.compose(new Delta(JSON.parse(data[i].delta)))
+                        LastId = data[i].id
                     }
                 }
 
@@ -120,13 +122,15 @@ function synchronize() {
                     let remoteChangeTransformed = localChange.transform(remoteChange)
                     quill.updateContents(remoteChangeTransformed, 'silent')
 
-                    localChange = remoteChange.transform(localChange, true) //localChange.compose(remoteChangeTransformed)
+                    localChange = remoteChange.transform(localChange, true)
                 } else {
                     quill.updateContents(remoteChange, 'silent')
                 }
 
-                state.private.LastSyncedId = data[data.length - 1].id
-                saveToLocalStorage()
+                if (LastId) {
+                    state.private.LastSyncedId = LastId
+                    saveToLocalStorage()
+                }
             }
 
             setRemoteData(localChange, (data) => {
