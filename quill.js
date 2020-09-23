@@ -8,95 +8,95 @@ function copyDelta(delta) {
 
 
 function getRemoteData(callback) {
-        let sortQuery = ""
-        if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
-            sortQuery = "&q=id:>" + state.private.LastSyncedId
-        }
+    let sortQuery = ""
+    if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
+        sortQuery = "&q=id:>" + state.private.LastSyncedId
+    }
 
-        fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
-            .then((response) => {
-                if (response.ok) {
-                    return Promise.resolve(response)
-                } else {
-                    return Promise.reject(new Error(response.statusText))
-                }
-            })
-            .then((response) => {
-                return response.json()
-            })
-            .then(callback)
-            .catch((error) => {
-                console.log('Request failed', error)
-                syncStatus.set("error")
-                state.private.changeSinceLastUpload = localChange.compose(state.private.changeSinceLastUpload)
-            })
+    fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
+        .then((response) => {
+            if (response.ok) {
+                return Promise.resolve(response)
+            } else {
+                return Promise.reject(new Error(response.statusText))
+            }
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then(callback)
+        .catch((error) => {
+            console.log('Request failed', error)
+            syncStatus.set("error")
+            state.private.changeSinceLastUpload = localChange.compose(state.private.changeSinceLastUpload)
+        })
 }
 
 
-function setRemoteData(changesToUpload,callback) {
-        if (!changesToUpload) {
-            if (!state.private.changeSinceLastUpload) {
-                syncStatus.set("success")
-                return //nothing to do
-            }
-            changesToUpload = copyDelta(state.private.changeSinceLastUpload)
-            state.private.changeSinceLastUpload = null
+function setRemoteData(changesToUpload, callback) {
+    if (!changesToUpload) {
+        if (!state.private.changeSinceLastUpload) {
+            syncStatus.set("success")
+            return //nothing to do
         }
+        changesToUpload = copyDelta(state.private.changeSinceLastUpload)
+        state.private.changeSinceLastUpload = null
+    }
 
-        if (changesToUpload && state.private.changeSinceLastUpload) {
-            changesToUpload = state.private.changeSinceLastUpload.compose(changesToUpload)
-            state.private.changeSinceLastUpload = null
-        }
+    if (changesToUpload && state.private.changeSinceLastUpload) {
+        changesToUpload = state.private.changeSinceLastUpload.compose(changesToUpload)
+        state.private.changeSinceLastUpload = null
+    }
 
-        if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())){
-            if (state.private.changeSinceLastUpload) {
-                syncStatus.set("neutral")
-            } else {
-                syncStatus.set("success")
-            }
-            return // empty delta
-        }
-        if (!state.private.key) {
-            syncStatus.set("error")
-            return 
-        }
-
-        data = {
-            type: "delta",
-            delta: JSON.stringify(changesToUpload)
-        }
-        if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
-            data.id = state.private.LastSyncedId
+    if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) {
+        if (state.private.changeSinceLastUpload) {
+            syncStatus.set("neutral")
         } else {
-            data.id = 0
+            syncStatus.set("success")
         }
-        data.id += Math.floor(Math.random() * 1000) + 1
+        return // empty delta
+    }
+    if (!state.private.key) {
+        syncStatus.set("error")
+        return
+    }
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': state.private.key
-            },
-            body: JSON.stringify(data)
-        }
+    data = {
+        type: "delta",
+        delta: JSON.stringify(changesToUpload)
+    }
+    if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
+        data.id = state.private.LastSyncedId
+    } else {
+        data.id = 0
+    }
+    data.id += Math.floor(Math.random() * 1000) + 1
 
-        fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id, options)
-            .then((response) => {
-                if (response.ok) {
-                    return Promise.resolve(response)
-                } else {
-                    return Promise.reject(new Error(response.statusText))
-                }
-            })
-            .then((response) => {
-                return response.json()
-            })
-            .then(callback)
-            .catch((error) => { 
-                console.log('Request failed', error)
-                syncStatus.set("error")
-                state.private.changeSinceLastUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': state.private.key
+        },
+        body: JSON.stringify(data)
+    }
+
+    fetch('https://jsonbox.io/' + jsonboxIdentifier + state.private.id, options)
+        .then((response) => {
+            if (response.ok) {
+                return Promise.resolve(response)
+            } else {
+                return Promise.reject(new Error(response.statusText))
+            }
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then(callback)
+        .catch((error) => {
+            console.log('Request failed', error)
+            syncStatus.set("error")
+            state.private.changeSinceLastUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
         })
 }
 
@@ -130,7 +130,7 @@ function synchronize() {
                 state.private.LastSyncedId = response[response.length - 1].id
                 saveToLocalStorage()
             }
-            
+
             setRemoteData(localChange, (data) => {
                 state.private.LastSyncedId = data.id
                 saveToLocalStorage()
@@ -190,7 +190,7 @@ ifvisible.wakeup(function() {
 
 var syncStatus = {
     button: document.getElementById("sync-button"),
-    isReady: function () {
+    isReady: function() {
         if (this.status == "neutral" || this.status == "success") return true
         return false
     },
@@ -198,21 +198,22 @@ var syncStatus = {
     set: function(newStatus) {
         if (this.status == newStatus) return
 
-        if (!["neutral", "success", "error", "running", "offline"].includes(newStatus)){
+        if (!["neutral", "success", "error", "running", "offline"].includes(newStatus)) {
             console.error("unkown status:" + newStatus)
             return
         }
-        
+
         this.button.classList = newStatus
         this.status = newStatus
     }
 }
-    
+
 if (shared) {
     window.addEventListener('online', handleConnection);
     window.addEventListener('offline', handleConnection);
     handleConnection()
 }
+
 function handleConnection() { // https://stackoverflow.com/a/44766737
     function isReachable(url) {
         /**
@@ -223,7 +224,10 @@ function handleConnection() { // https://stackoverflow.com/a/44766737
          *   https://google.com/noexist does not throw
          *   https://noexist.com/noexist does throw
          */
-        return fetch(url, { method: 'HEAD', mode: 'no-cors' })
+        return fetch(url, {
+                method: 'HEAD',
+                mode: 'no-cors'
+            })
             .then(function(resp) {
                 return resp && (resp.ok || resp.type === 'opaque');
             })
@@ -251,7 +255,7 @@ function handleConnection() { // https://stackoverflow.com/a/44766737
                         syncStatus.set("offline")
                     }
                 });
-                
+
                 console.log('no connectivity');
                 syncStatus.set("offline")
             }
@@ -263,7 +267,7 @@ function handleConnection() { // https://stackoverflow.com/a/44766737
     }
 }
 
-    
+
 //#endregion functions
 
 //#region setup
@@ -290,7 +294,9 @@ let quillOptions = {
 }
 var quill = new Quill('#editor-container', quillOptions)
 
-document.getElementById("print-button").addEventListener('click', () => { window.print() })
+document.getElementById("print-button").addEventListener('click', () => {
+    window.print()
+})
 
 let toolbar = document.getElementById("toolbar-container")
 var emoji_picker = new EmojiButton({
@@ -299,7 +305,10 @@ var emoji_picker = new EmojiButton({
     'autoFocusSearch': false
 })
 
-var LastSelection = { index: 0, length: 0 }
+var LastSelection = {
+    index: 0,
+    length: 0
+}
 quill.on('editor-change', (eventName, range, oldRange, source) => {
     if (eventName === 'selection-change') {
         if (range) {
@@ -316,7 +325,9 @@ function insertText(text) {
 }
 
 emoji_picker.on('emoji', insertText)
-document.getElementById("emoji-button").addEventListener('click', () => { emoji_picker.togglePicker(toolbar) })
+document.getElementById("emoji-button").addEventListener('click', () => {
+    emoji_picker.togglePicker(toolbar)
+})
 
 
 var color_picker = {}
@@ -327,7 +338,7 @@ color_picker.options = {
     position: 'bottom-middle',
     adjustableNumbers: false,
     padding: 8,
-    
+
     swatches: [
         '#001f3f',
         '#0074D9',
@@ -347,7 +358,7 @@ color_picker.options = {
         '#DDDDDD',
         '#FFFFFF'
     ],
-    
+
     components: {
         preview: true,
         lockOpacity: true,
@@ -362,7 +373,7 @@ color_picker.options = {
 
 
 
-function ColorPickrButtonPress(){
+function ColorPickrButtonPress() {
     color_picker.id = this.id
     color_picker.options.el = '#' + this.id
 
@@ -382,7 +393,7 @@ function ColorPickrButtonPress(){
     color_picker.pickr.show()
 
 
-    function ColorPickrSet(instance){
+    function ColorPickrSet(instance) {
         let hex = instance._color.toHEXA().toString()
         let format
         if (color_picker.id == "background-color") {
@@ -408,15 +419,15 @@ quill.on('text-change', function(delta) {
     saveToLocalStorageThrottled()
 })
 
-syncStatus.button.addEventListener('click', () => { 
-    ifvisible.wakeup() 
+syncStatus.button.addEventListener('click', () => {
+    ifvisible.wakeup()
     if (syncStatus.isReady()) syncStatus.set("neutral")
 })
 
 document.onkeydown = function(e) {
     if (e.ctrlKey && e.key == "s") {
         console.log("Strg+s")
-        ifvisible.wakeup() 
+        ifvisible.wakeup()
         if (syncStatus.isReady()) syncStatus.set("neutral")
         return false;
     }
@@ -444,7 +455,7 @@ var state = {
 if (shared) {
     const params = new URL(location.href).searchParams
     state.private.id = params.get('id')
-    
+
     if (!isvalid_boxid(state.private.id)) {
         localStorage.removeItem(state.private.id)
         window.location.href = window.location.origin + "?error=invalidId"
@@ -456,11 +467,11 @@ if (shared) {
 
     let key = params.get('pwd')
     if (isvalid_uuid(key)) {
-        state.private.key = key        
+        state.private.key = key
     }
 
-    if (key){
-        window.history.replaceState({}, document.title, "/shared?id=" + state.private.id );
+    if (key) {
+        window.history.replaceState({}, document.title, "/shared?id=" + state.private.id);
     }
 } else {
     if (localStorage.getItem(state.private.id)) {
@@ -473,7 +484,7 @@ if (shared) {
 if (shared && !state.private.key) { // if shared but no write-key 
     quill.disable()
 } else {
-    let element=document.getElementById("main-content")
+    let element = document.getElementById("main-content")
     element.classList.remove("readonly")
     element.classList.add("readwrite")
 }

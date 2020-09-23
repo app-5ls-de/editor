@@ -1,4 +1,5 @@
-.ql-snow.ql-toolbar a, .ql-snow .ql-toolbar a {
+.ql-snow.ql-toolbar a,
+.ql-snow .ql-toolbar a {
     background: 0 0;
     border: none;
     cursor: pointer;
@@ -14,14 +15,15 @@
     border: none;
 }
 
-#toolbar-container{
-    position: fixed; 
+#toolbar-container {
+    position: fixed;
     background: white;
     background: linear-gradient(90deg, lightgrey 0%, white 3%, white 97%, lightgrey 100%);
     z-index: 9999;
     top: 0;
     left: 0;
-    right: 0; /* or width:100vw; */
+    right: 0;
+    /* or width:100vw; */
     overflow-x: auto;
     white-space: nowrap;
     border-bottom: 1px solid #ccc;
@@ -29,11 +31,13 @@
 }
 
 .ql-formats:last-child {
-    margin-right: 3% !important; /* background gradient */
+    margin-right: 3% !important;
+    /* background gradient */
 }
 
 .ql-formats:first-child {
-    margin-left: 3% !important; /* background gradient */
+    margin-left: 3% !important;
+    /* background gradient */
 }
 
 .ql-editor.ql-blank::before {
@@ -41,20 +45,20 @@
     right: unset !important;
 }
 
-.ql-formats{
+.ql-formats {
     height: min-content;
     border: 1px solid #ccc;
 }
 
-.ql-formats.without-border{
+.ql-formats.without-border {
     border: none;
 }
 
-.ql-formats.no-focus>button:focus{
+.ql-formats.no-focus>button:focus {
     outline: none;
 }
 
-#toolbar-container > .spacer{
+#toolbar-container>.spacer {
     margin: auto;
     display: inline-block;
     width: 3rem;
@@ -77,7 +81,7 @@
     min-width: 100%;
 }
 
-.footer svg{
+.footer svg {
     height: 2rem;
     width: 2rem;
     padding: 10px;
@@ -88,12 +92,12 @@
 }
 
 .footer {
-  background-color: white;
-  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
-  border: 1px solid black;
-  margin: 1rem;
-  border-radius: 50%;
-  display: inline-block;
+    background-color: white;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+    border: 1px solid black;
+    margin: 1rem;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 #main-content.readonly .ql-blank::before {
@@ -104,12 +108,12 @@
     display: none;
 }
 
-#main-content.readonly .ql-editor>*{ 
+#main-content.readonly .ql-editor>* {
     cursor: default !important;
 }
 
-#main-content.readonly #editor-container {	
-    min-height: 100vh;	
+#main-content.readonly #editor-container {
+    min-height: 100vh;
 }
 
 
@@ -123,6 +127,7 @@
 }
 
 @media print {
+
     #toolbar-container,
     .ql-blank::before,
     .footer {
@@ -137,68 +142,96 @@
 
 
 
-.ql-editor ol, .ql-editor ul {
-    padding-left:1em;
-}
-.ql-editor ol li:not(.ql-direction-rtl), .ql-editor ul li:not(.ql-direction-rtl) {
-    padding-left:1em;
-}
-.ql-editor .ql-indent-1:not(.ql-direction-rtl){
-    padding-left:2em
-}
-.ql-editor li.ql-indent-1:not(.ql-direction-rtl){
-    padding-left:3em
-}
-.ql-editor .ql-indent-2:not(.ql-direction-rtl){
-    padding-left:4em
-}
-.ql-editor li.ql-indent-2:not(.ql-direction-rtl){
-    padding-left:5em
-}
-.ql-editor .ql-indent-3:not(.ql-direction-rtl){
-    padding-left:6em
-}
-.ql-editor li.ql-indent-3:not(.ql-direction-rtl){
-    padding-left:7em
-}
-.ql-editor .ql-indent-4:not(.ql-direction-rtl){
-    padding-left:8em
-}
-.ql-editor li.ql-indent-4:not(.ql-direction-rtl){
-    padding-left:9em
-}
-.ql-editor .ql-indent-5:not(.ql-direction-rtl){
-    padding-left:10em
-}
-.ql-editor li.ql-indent-5:not(.ql-direction-rtl){
-    padding-left:11em
-}
-.ql-editor .ql-indent-6:not(.ql-direction-rtl){
-    padding-left:12em
-}
-.ql-editor li.ql-indent-6:not(.ql-direction-rtl){
-    padding-left:13em
-}
-.ql-editor .ql-indent-7:not(.ql-direction-rtl){
-    padding-left:14em
-}
-.ql-editor li.ql-indent-7:not(.ql-direction-rtl){
-    padding-left:15em
-}
-.ql-editor .ql-indent-8:not(.ql-direction-rtl){
-    padding-left:16em
-}
-.ql-editor li.ql-indent-8:not(.ql-direction-rtl){
-    padding-left:17em
-}
-.ql-editor .ql-indent-9:not(.ql-direction-rtl){
-    padding-left:18em
-}
-.ql-editor li.ql-indent-9:not(.ql-direction-rtl){
-    padding-left:19m
+.ql-editor ol,
+.ql-editor ul {
+    padding-left: 1em;
 }
 
-.ql-snow.ql-toolbar a:hover .ql-fill, .ql-snow .ql-toolbar a:hover .ql-fill, .ql-snow.ql-toolbar a:focus .ql-fill, .ql-snow .ql-toolbar a:focus .ql-fill, .ql-snow.ql-toolbar a:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar a:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar a:focus .ql-stroke.ql-fill, .ql-snow .ql-toolbar a:focus .ql-stroke.ql-fill {
+.ql-editor ol li:not(.ql-direction-rtl),
+.ql-editor ul li:not(.ql-direction-rtl) {
+    padding-left: 1em;
+}
+
+.ql-editor .ql-indent-1:not(.ql-direction-rtl) {
+    padding-left: 2em
+}
+
+.ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
+    padding-left: 3em
+}
+
+.ql-editor .ql-indent-2:not(.ql-direction-rtl) {
+    padding-left: 4em
+}
+
+.ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
+    padding-left: 5em
+}
+
+.ql-editor .ql-indent-3:not(.ql-direction-rtl) {
+    padding-left: 6em
+}
+
+.ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
+    padding-left: 7em
+}
+
+.ql-editor .ql-indent-4:not(.ql-direction-rtl) {
+    padding-left: 8em
+}
+
+.ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
+    padding-left: 9em
+}
+
+.ql-editor .ql-indent-5:not(.ql-direction-rtl) {
+    padding-left: 10em
+}
+
+.ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
+    padding-left: 11em
+}
+
+.ql-editor .ql-indent-6:not(.ql-direction-rtl) {
+    padding-left: 12em
+}
+
+.ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
+    padding-left: 13em
+}
+
+.ql-editor .ql-indent-7:not(.ql-direction-rtl) {
+    padding-left: 14em
+}
+
+.ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
+    padding-left: 15em
+}
+
+.ql-editor .ql-indent-8:not(.ql-direction-rtl) {
+    padding-left: 16em
+}
+
+.ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
+    padding-left: 17em
+}
+
+.ql-editor .ql-indent-9:not(.ql-direction-rtl) {
+    padding-left: 18em
+}
+
+.ql-editor li.ql-indent-9:not(.ql-direction-rtl) {
+    padding-left: 19m
+}
+
+.ql-snow.ql-toolbar a:hover .ql-fill,
+.ql-snow .ql-toolbar a:hover .ql-fill,
+.ql-snow.ql-toolbar a:focus .ql-fill,
+.ql-snow .ql-toolbar a:focus .ql-fill,
+.ql-snow.ql-toolbar a:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar a:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar a:focus .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar a:focus .ql-stroke.ql-fill {
     fill: #06c;
 }
 
@@ -239,9 +272,10 @@
 
 @keyframes spin {
     from {
-        transform:rotate(0deg);
+        transform: rotate(0deg);
     }
+
     to {
-        transform:rotate(360deg);
+        transform: rotate(360deg);
     }
 }

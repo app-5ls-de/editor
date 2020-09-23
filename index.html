@@ -62,7 +62,9 @@ layout: bare
     function copyTextToClipboard(text, referenceElement) { // https://deanmarktaylor.github.io/clipboard-test/
         function showTooltip(DomElement) {
             DomElement.style.display = "inline-block"
-            setTimeout(function () { DomElement.style.display = "none" }, 1000)
+            setTimeout(function() {
+                DomElement.style.display = "none"
+            }, 1000)
         }
 
         function fallbackCopyTextToClipboard(text) {
@@ -96,10 +98,10 @@ layout: bare
             fallbackCopyTextToClipboard(text);
             return;
         }
-        navigator.clipboard.writeText(text).then(function () {
+        navigator.clipboard.writeText(text).then(function() {
             /* console.log('Async: Copying to clipboard was successful!'); */
             showTooltip(referenceElement)
-        }, function (err) {
+        }, function(err) {
             fallbackCopyTextToClipboard(text);
             console.error('Async: Could not copy text: ', err);
         });
@@ -120,11 +122,11 @@ layout: bare
     function share(url, title, referenceElement) {
         if (navigator.share) {
             navigator.share({
-                title: title,
-                url: url
-            }).then(() => {
-                console.log('Thanks for sharing!');
-            })
+                    title: title,
+                    url: url
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                })
                 .catch(console.error);
         } else {
             copyTextToClipboard(url, referenceElement)
@@ -147,8 +149,9 @@ layout: bare
         span_copied.classList.add("copied")
 
         button_delete.innerHTML = '<svg viewBox="0 0 64 64"><path d="M17.586,46.414C17.977,46.805,18.488,47,19,47s1.023-0.195,1.414-0.586L32,34.828l11.586,11.586 C43.977,46.805,44.488,47,45,47s1.023-0.195,1.414-0.586c0.781-0.781,0.781-2.047,0-2.828L34.828,32l11.586-11.586 c0.781-0.781,0.781-2.047,0-2.828c-0.781-0.781-2.047-0.781-2.828,0L32,29.172L20.414,17.586c-0.781-0.781-2.047-0.781-2.828,0 c-0.781,0.781-0.781,2.047,0,2.828L29.172,32L17.586,43.586C16.805,44.367,16.805,45.633,17.586,46.414z"/><path d="M32,64c8.547,0,16.583-3.329,22.626-9.373C60.671,48.583,64,40.547,64,32s-3.329-16.583-9.374-22.626 C48.583,3.329,40.547,0,32,0S15.417,3.329,9.374,9.373C3.329,15.417,0,23.453,0,32s3.329,16.583,9.374,22.626 C15.417,60.671,23.453,64,32,64z M12.202,12.202C17.49,6.913,24.521,4,32,4s14.51,2.913,19.798,8.202C57.087,17.49,60,24.521,60,32 s-2.913,14.51-8.202,19.798C46.51,57.087,39.479,60,32,60s-14.51-2.913-19.798-8.202C6.913,46.51,4,39.479,4,32 S6.913,17.49,12.202,12.202z"/></svg>'
-        button_delete.onclick = function () {
+        button_delete.onclick = function() {
             let svg = this.firstElementChild
+
             function backToDefault() {
                 button_pressed = undefined
                 svg.style.background = "initial"
@@ -177,16 +180,16 @@ layout: bare
         }
 
         button_rename.innerHTML = '<svg viewBox="0 0 512 512"><path d="m455.1,137.9l-32.4,32.4-81-81.1 32.4-32.4c6.6-6.6 18.1-6.6 24.7,0l56.3,56.4c6.8,6.8 6.8,17.9 0,24.7zm-270.7,271l-81-81.1 209.4-209.7 81,81.1-209.4,209.7zm-99.7-42l60.6,60.7-84.4,23.8 23.8-84.5zm399.3-282.6l-56.3-56.4c-11-11-50.7-31.8-82.4,0l-285.3,285.5c-2.5,2.5-4.3,5.5-5.2,8.9l-43,153.1c-2,7.1 0.1,14.7 5.2,20 5.2,5.3 15.6,6.2 20,5.2l153-43.1c3.4-0.9 6.4-2.7 8.9-5.2l285.1-285.5c22.7-22.7 22.7-59.7 0-82.5z"/></svg>'
-        button_rename.onclick = function () {
+        button_rename.onclick = function() {
             rename(element.private.id)
         }
 
         button_share_ro.innerHTML = '<svg viewBox="0 0 485 485"><path d="M345,175v-72.5C345,45.981,299.019,0,242.5,0S140,45.981,140,102.5V175H70v310h345V175H345z M170,102.5 c0-39.977,32.523-72.5,72.5-72.5S315,62.523,315,102.5V175H170V102.5z M385,455H100V205h285V455z"/><g transform="matrix(.41136 0 0 .41136 148.17 235.67)"><path d="m339.59 314.53c-14.215 0-27.456 4.133-38.621 11.239l-112.68-78.67c1.809-6.315 2.798-12.976 2.798-19.871 0-6.896-.989-13.557-2.798-19.871l109.64-76.547c11.764 8.356 26.133 13.286 41.662 13.286 39.79 0 72.047-32.257 72.047-72.047s-32.256-72.048-72.046-72.048-72.047 32.257-72.047 72.047c0 5.255.578 10.373 1.646 15.308l-112.42 78.491c-10.974-6.759-23.892-10.666-37.727-10.666-39.79 0-72.047 32.257-72.047 72.047s32.256 72.047 72.047 72.047c13.834 0 26.753-3.907 37.727-10.666l113.29 79.097c-1.629 6.017-2.514 12.34-2.514 18.872 0 39.79 32.257 72.047 72.047 72.047s72.047-32.257 72.047-72.047-32.257-72.048-72.047-72.048z"/></g></svg>'
-        button_share_ro.onclick = function () {
+        button_share_ro.onclick = function() {
             share(location.origin + "/shared?id=" + element.private.id, title, span_copied)
         }
         button_share_rw.innerHTML = '<svg viewBox="0 0 485 485"><path d="M222.5,175v-72.5C222.5,45.981,176.519,0,120,0S17.5,45.981,17.5,102.5V190h30v-87.5C47.5,62.523,80.023,30,120,30 s72.5,32.523,72.5,72.5V175h-70v310h345V175H222.5z M437.5,455h-285V205h285V455z"/><g transform="matrix(.41136 0 0 .41136 205.67 235.67)"><path d="m339.59 314.53c-14.215 0-27.456 4.133-38.621 11.239l-112.68-78.67c1.809-6.315 2.798-12.976 2.798-19.871 0-6.896-.989-13.557-2.798-19.871l109.64-76.547c11.764 8.356 26.133 13.286 41.662 13.286 39.79 0 72.047-32.257 72.047-72.047s-32.256-72.048-72.046-72.048-72.047 32.257-72.047 72.047c0 5.255.578 10.373 1.646 15.308l-112.42 78.491c-10.974-6.759-23.892-10.666-37.727-10.666-39.79 0-72.047 32.257-72.047 72.047s32.256 72.047 72.047 72.047c13.834 0 26.753-3.907 37.727-10.666l113.29 79.097c-1.629 6.017-2.514 12.34-2.514 18.872 0 39.79 32.257 72.047 72.047 72.047s72.047-32.257 72.047-72.047-32.257-72.048-72.047-72.048z"/></g></svg>'
-        button_share_rw.onclick = function () {
+        button_share_rw.onclick = function() {
             share(location.origin + "/shared?id=" + element.private.id + "&pwd=" + element.private.key, title, span_copied)
         }
 
@@ -204,7 +207,7 @@ layout: bare
         span.append(button_delete)
         span.append(button_share_ro)
         if (element.private.key) {
-        span.append(button_share_rw)
+            span.append(button_share_rw)
         }
         div.append(span)
         div.append(span_copied)
@@ -214,8 +217,9 @@ layout: bare
     if (localStorage.hasOwnProperty("local") && localStorage.local) {
         let button = document.createElement("button")
         button.innerHTML = '<svg viewBox="0 0 64 64"><path d="M17.586,46.414C17.977,46.805,18.488,47,19,47s1.023-0.195,1.414-0.586L32,34.828l11.586,11.586 C43.977,46.805,44.488,47,45,47s1.023-0.195,1.414-0.586c0.781-0.781,0.781-2.047,0-2.828L34.828,32l11.586-11.586 c0.781-0.781,0.781-2.047,0-2.828c-0.781-0.781-2.047-0.781-2.828,0L32,29.172L20.414,17.586c-0.781-0.781-2.047-0.781-2.828,0 c-0.781,0.781-0.781,2.047,0,2.828L29.172,32L17.586,43.586C16.805,44.367,16.805,45.633,17.586,46.414z"/><path d="M32,64c8.547,0,16.583-3.329,22.626-9.373C60.671,48.583,64,40.547,64,32s-3.329-16.583-9.374-22.626 C48.583,3.329,40.547,0,32,0S15.417,3.329,9.374,9.373C3.329,15.417,0,23.453,0,32s3.329,16.583,9.374,22.626 C15.417,60.671,23.453,64,32,64z M12.202,12.202C17.49,6.913,24.521,4,32,4s14.51,2.913,19.798,8.202C57.087,17.49,60,24.521,60,32 s-2.913,14.51-8.202,19.798C46.51,57.087,39.479,60,32,60s-14.51-2.913-19.798-8.202C6.913,46.51,4,39.479,4,32 S6.913,17.49,12.202,12.202z"/></svg>'
-        button.onclick = function () {
+        button.onclick = function() {
             let svg = this.firstElementChild
+
             function backToDefault() {
                 button_pressed = undefined
                 svg.style.background = "initial"
