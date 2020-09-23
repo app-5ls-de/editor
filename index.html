@@ -110,13 +110,13 @@ layout: bare
 
     function rename(id) {
         let element = JSON.parse(localStorage[id])
-        let title = element.private.title
-        if (!title) title = element.private.id
+        let title = element.title
+        if (!title) title = element.id
         var newTitle = prompt("Please enter the new title:", title)
         if (newTitle != null && newTitle != "") {
-            element.private.title = newTitle.trim()
+            element.title = newTitle.trim()
             localStorage.setItem(id, JSON.stringify(element))
-            document.getElementById(id).firstElementChild.innerText = element.private.title
+            document.getElementById(id).firstElementChild.innerText = element.title
         }
     }
 
@@ -160,8 +160,8 @@ layout: bare
             }
 
             if (button_pressed == this) {
-                localStorage.removeItem(element.private.id)
-                document.getElementById(element.private.id).remove()
+                localStorage.removeItem(element.id)
+                document.getElementById(element.id).remove()
                 backToDefault()
             } else {
                 button_pressed = this
@@ -174,36 +174,39 @@ layout: bare
 
         let title = window.document.title
 
-        if (!element.private.title) {
-            element.private.title = element.private.id
+        if (!element.title) {
+            element.title = element.id
         }
 
-        title += ' | ' + element.private.title
+        title += ' | ' + element.title
 
 
         button_rename.innerHTML = '<svg viewBox="0 0 512 512"><path d="m455.1,137.9l-32.4,32.4-81-81.1 32.4-32.4c6.6-6.6 18.1-6.6 24.7,0l56.3,56.4c6.8,6.8 6.8,17.9 0,24.7zm-270.7,271l-81-81.1 209.4-209.7 81,81.1-209.4,209.7zm-99.7-42l60.6,60.7-84.4,23.8 23.8-84.5zm399.3-282.6l-56.3-56.4c-11-11-50.7-31.8-82.4,0l-285.3,285.5c-2.5,2.5-4.3,5.5-5.2,8.9l-43,153.1c-2,7.1 0.1,14.7 5.2,20 5.2,5.3 15.6,6.2 20,5.2l153-43.1c3.4-0.9 6.4-2.7 8.9-5.2l285.1-285.5c22.7-22.7 22.7-59.7 0-82.5z"/></svg>'
         button_rename.onclick = function() {
-            rename(element.private.id)
+            rename(element.id)
         }
 
         button_share_ro.innerHTML = '<svg viewBox="0 0 485 485"><path d="M345,175v-72.5C345,45.981,299.019,0,242.5,0S140,45.981,140,102.5V175H70v310h345V175H345z M170,102.5 c0-39.977,32.523-72.5,72.5-72.5S315,62.523,315,102.5V175H170V102.5z M385,455H100V205h285V455z"/><g transform="matrix(.41136 0 0 .41136 148.17 235.67)"><path d="m339.59 314.53c-14.215 0-27.456 4.133-38.621 11.239l-112.68-78.67c1.809-6.315 2.798-12.976 2.798-19.871 0-6.896-.989-13.557-2.798-19.871l109.64-76.547c11.764 8.356 26.133 13.286 41.662 13.286 39.79 0 72.047-32.257 72.047-72.047s-32.256-72.048-72.046-72.048-72.047 32.257-72.047 72.047c0 5.255.578 10.373 1.646 15.308l-112.42 78.491c-10.974-6.759-23.892-10.666-37.727-10.666-39.79 0-72.047 32.257-72.047 72.047s32.256 72.047 72.047 72.047c13.834 0 26.753-3.907 37.727-10.666l113.29 79.097c-1.629 6.017-2.514 12.34-2.514 18.872 0 39.79 32.257 72.047 72.047 72.047s72.047-32.257 72.047-72.047-32.257-72.048-72.047-72.048z"/></g></svg>'
         button_share_ro.onclick = function() {
-            share(location.origin + "/shared?id=" + element.private.id, title, span_copied)
+            share(location.origin + "/shared?id=" + element.id, title, span_copied)
         }
-        button_share_rw.innerHTML = '<svg viewBox="0 0 485 485"><path d="M222.5,175v-72.5C222.5,45.981,176.519,0,120,0S17.5,45.981,17.5,102.5V190h30v-87.5C47.5,62.523,80.023,30,120,30 s72.5,32.523,72.5,72.5V175h-70v310h345V175H222.5z M437.5,455h-285V205h285V455z"/><g transform="matrix(.41136 0 0 .41136 205.67 235.67)"><path d="m339.59 314.53c-14.215 0-27.456 4.133-38.621 11.239l-112.68-78.67c1.809-6.315 2.798-12.976 2.798-19.871 0-6.896-.989-13.557-2.798-19.871l109.64-76.547c11.764 8.356 26.133 13.286 41.662 13.286 39.79 0 72.047-32.257 72.047-72.047s-32.256-72.048-72.046-72.048-72.047 32.257-72.047 72.047c0 5.255.578 10.373 1.646 15.308l-112.42 78.491c-10.974-6.759-23.892-10.666-37.727-10.666-39.79 0-72.047 32.257-72.047 72.047s32.256 72.047 72.047 72.047c13.834 0 26.753-3.907 37.727-10.666l113.29 79.097c-1.629 6.017-2.514 12.34-2.514 18.872 0 39.79 32.257 72.047 72.047 72.047s72.047-32.257 72.047-72.047-32.257-72.048-72.047-72.048z"/></g></svg>'
-        button_share_rw.onclick = function() {
-            share(location.origin + "/shared?id=" + element.private.id + "&pwd=" + element.private.key, title, span_copied)
+        if (element.key) {
+            button_share_rw.innerHTML = '<svg viewBox="0 0 485 485"><path d="M222.5,175v-72.5C222.5,45.981,176.519,0,120,0S17.5,45.981,17.5,102.5V190h30v-87.5C47.5,62.523,80.023,30,120,30 s72.5,32.523,72.5,72.5V175h-70v310h345V175H222.5z M437.5,455h-285V205h285V455z"/><g transform="matrix(.41136 0 0 .41136 205.67 235.67)"><path d="m339.59 314.53c-14.215 0-27.456 4.133-38.621 11.239l-112.68-78.67c1.809-6.315 2.798-12.976 2.798-19.871 0-6.896-.989-13.557-2.798-19.871l109.64-76.547c11.764 8.356 26.133 13.286 41.662 13.286 39.79 0 72.047-32.257 72.047-72.047s-32.256-72.048-72.046-72.048-72.047 32.257-72.047 72.047c0 5.255.578 10.373 1.646 15.308l-112.42 78.491c-10.974-6.759-23.892-10.666-37.727-10.666-39.79 0-72.047 32.257-72.047 72.047s32.256 72.047 72.047 72.047c13.834 0 26.753-3.907 37.727-10.666l113.29 79.097c-1.629 6.017-2.514 12.34-2.514 18.872 0 39.79 32.257 72.047 72.047 72.047s72.047-32.257 72.047-72.047-32.257-72.048-72.047-72.048z"/></g></svg>'
+            button_share_rw.onclick = function() {
+                share(location.origin + "/shared?id=" + element.id + "&pwd=" + element.key, title, span_copied)
+            }
         }
 
 
-        div.id = element.private.id
+        a.innerHTML = element.title
+        div.id = element.id
 
-        a.href = location.origin + "/shared?id=" + element.private.id
+        a.href = location.origin + "/shared?id=" + element.id
         div.append(a)
         if (!element.disabled) {
             span.append(button_rename)
             span.append(button_share_ro)
-        if (element.private.key) {
+            if (element.key) {
                 span.append(button_share_rw)
             }
         }
@@ -251,9 +254,13 @@ layout: bare
                 localStorage.removeItem(key)
                 continue
             }
-            if (!element || !element.private || !element.private.id || key != element.private.id) {
+            if (!element || (element.id && key != element.id) || (element.private && element.private.id && key != element.private.id)) {
                 localStorage.removeItem(key)
                 continue
+            }
+
+            if (element.private && element.private.id) {
+                element.id = element.private.id
             }
 
             if (!element.jsonboxIdentifier || element.jsonboxIdentifier != jsonboxIdentifier) {

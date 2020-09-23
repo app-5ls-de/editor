@@ -9,11 +9,11 @@ function copyDelta(delta) {
 
 function getRemoteData(callback) {
     let sortQuery = ""
-    if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
-        sortQuery = "&q=id:>" + state.private.LastSyncedId
+    if (state.LastSyncedId) { //typeof state.LastSyncedId == "number"
+        sortQuery = "&q=id:>" + state.LastSyncedId
     }
 
-    fetch(jsonboxOrigin + '/' + state.jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
+    fetch(jsonboxOrigin + '/' + state.jsonboxIdentifier + state.id + "?limit=1000&sort=id" + sortQuery)
         .then((response) => {
             if (response.ok) {
                 return Promise.resolve(response)
@@ -28,33 +28,33 @@ function getRemoteData(callback) {
         .catch((error) => {
             console.log('Request failed', error)
             syncStatus.set("error")
-            state.private.changeSinceLastUpload = localChange.compose(state.private.changeSinceLastUpload)
+            state.changeSinceLastUpload = localChange.compose(state.changeSinceLastUpload)
         })
 }
 
 
 function setRemoteData(changesToUpload, callback) {
     if (!changesToUpload) {
-        if (!state.private.changeSinceLastUpload) {
+        if (!state.changeSinceLastUpload) {
             syncStatus.set("success")
             return //nothing to do
         }
-        changesToUpload = copyDelta(state.private.changeSinceLastUpload)
-        state.private.changeSinceLastUpload = null
-    } else if (state.private.changeSinceLastUpload) {
-        changesToUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
-        state.private.changeSinceLastUpload = null
+        changesToUpload = copyDelta(state.changeSinceLastUpload)
+        state.changeSinceLastUpload = null
+    } else if (state.changeSinceLastUpload) {
+        changesToUpload = changesToUpload.compose(state.changeSinceLastUpload)
+        state.changeSinceLastUpload = null
     }
 
     if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) {
-        if (state.private.changeSinceLastUpload) {
+        if (state.changeSinceLastUpload) {
             syncStatus.set("neutral")
         } else {
             syncStatus.set("success")
         }
         return // empty delta
     }
-    if (!state.private.key) {
+    if (!state.key) {
         syncStatus.set("error")
         return
     }
@@ -63,8 +63,8 @@ function setRemoteData(changesToUpload, callback) {
         type: "delta",
         delta: JSON.stringify(changesToUpload)
     }
-    if (state.private.LastSyncedId) { //typeof state.private.LastSyncedId == "number"
-        data.id = state.private.LastSyncedId
+    if (state.LastSyncedId) { //typeof state.LastSyncedId == "number"
+        data.id = state.LastSyncedId
     } else {
         data.id = 0
     }
@@ -74,12 +74,12 @@ function setRemoteData(changesToUpload, callback) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'x-api-key': state.private.key
+            'x-api-key': state.key
         },
         body: JSON.stringify(data)
     }
 
-    fetch(jsonboxOrigin + '/' + state.jsonboxIdentifier + state.private.id, options)
+    fetch(jsonboxOrigin + '/' + state.jsonboxIdentifier + state.id, options)
         .then((response) => {
             if (response.ok) {
                 return Promise.resolve(response)
@@ -94,7 +94,7 @@ function setRemoteData(changesToUpload, callback) {
         .catch((error) => {
             console.log('Request failed', error)
             syncStatus.set("error")
-            state.private.changeSinceLastUpload = changesToUpload.compose(state.private.changeSinceLastUpload)
+            state.changeSinceLastUpload = changesToUpload.compose(state.changeSinceLastUpload)
         })
 }
 
@@ -103,8 +103,8 @@ function synchronize() {
     if (shared && syncStatus.isReady()) {
         syncStatus.set("running")
 
-        localChange = copyDelta(state.private.changeSinceLastUpload)
-        state.private.changeSinceLastUpload = null
+        localChange = copyDelta(state.changeSinceLastUpload)
+        state.changeSinceLastUpload = null
         getRemoteData((data) => {
             if (data.length > 0) {
                 let remoteChange = new Delta()
@@ -126,16 +126,16 @@ function synchronize() {
                 }
 
                 if (LastId) {
-                    state.private.LastSyncedId = LastId
+                    state.LastSyncedId = LastId
                     saveToLocalStorage()
                 }
             }
 
             setRemoteData(localChange, (data) => {
-                state.private.LastSyncedId = data.id
+                state.LastSyncedId = data.id
                 saveToLocalStorage()
 
-                if (state.private.changeSinceLastUpload) {
+                if (state.changeSinceLastUpload) {
                     syncStatus.set("neutral")
                 } else {
                     syncStatus.set("success")
@@ -149,11 +149,11 @@ function synchronize() {
 function parse(data) {
     let parsed = JSON.parse(data)
 
-    parsed.private.changeSinceLastUpload = new Delta(parsed.private.changeSinceLastUpload)
-    parsed.public.content = new Delta(parsed.public.content)
+    parsed.changeSinceLastUpload = new Delta(parsed.changeSinceLastUpload)
+    parsed.content = new Delta(parsed.content)
 
-    if (JSON.stringify(parsed.private.changeSinceLastUpload) == JSON.stringify(new Delta())) parsed.private.changeSinceLastUpload = null // empty delta
-    if (JSON.stringify(parsed.private.content) == JSON.stringify(new Delta())) parsed.private.content = null // empty delta
+    if (JSON.stringify(parsed.changeSinceLastUpload) == JSON.stringify(new Delta())) parsed.changeSinceLastUpload = null // empty delta
+    if (JSON.stringify(parsed.content) == JSON.stringify(new Delta())) parsed.content = null // empty delta
 
     return parsed
 }
@@ -161,10 +161,10 @@ function parse(data) {
 
 function saveToLocalStorage() {
     if (!shared && !localStorage.hasOwnProperty("local") && quill.getText() == "\n") return
-    state.public.content = quill.getContents()
-    state.private.LastModified = new Date()
-    localStorage.setItem(state.private.id, JSON.stringify(state))
-    state.private.LastModified = undefined
+    state.content = quill.getContents()
+    state.LastModified = new Date()
+    localStorage.setItem(state.id, JSON.stringify(state))
+    state.LastModified = undefined
 }
 
 var saveToLocalStorageThrottled = throttle(saveToLocalStorage, 1000 * 1)
@@ -411,10 +411,10 @@ document.getElementById("background-color").addEventListener('click', ColorPickr
 quill.on('text-change', function(delta) {
     if (syncStatus.isReady()) syncStatus.set("neutral")
     if (shared) {
-        if (!state.private.changeSinceLastUpload) {
-            state.private.changeSinceLastUpload = new Delta()
+        if (!state.changeSinceLastUpload) {
+            state.changeSinceLastUpload = new Delta()
         }
-        state.private.changeSinceLastUpload = state.private.changeSinceLastUpload.compose(delta)
+        state.changeSinceLastUpload = state.changeSinceLastUpload.compose(delta)
     }
     saveToLocalStorageThrottled()
 })
@@ -439,50 +439,46 @@ document.onkeydown = function(e) {
 
 var jsonboxOrigin = "https://jsonbox.io"
 var state = {
-        private: {
     jsonboxIdentifier: jsonboxIdentifier,
-        key: undefined,
-        id: "local",
-        LastSyncedId: undefined,
-        changeSinceLastUpload: undefined,
-        title: undefined
-    },
-    public: {
-        content: undefined
-    }
+    key: undefined,
+    id: "local",
+    LastSyncedId: undefined,
+    changeSinceLastUpload: undefined,
+    title: undefined,
+    content: undefined
 }
 
 
 if (shared) {
     const params = new URL(location.href).searchParams
-    state.private.id = params.get('id')
+    state.id = params.get('id')
 
-    if (!isvalid_boxid(state.private.id)) {
-        localStorage.removeItem(state.private.id)
+    if (!isvalid_boxid(state.id)) {
+        localStorage.removeItem(state.id)
         window.location.href = window.location.origin + "?error=invalidId"
     }
 
-    if (localStorage.getItem(state.private.id)) {
-        state = parse(localStorage.getItem(state.private.id))
+    if (localStorage.getItem(state.id)) {
+        state = parse(localStorage.getItem(state.id))
     }
 
     let key = params.get('pwd')
     if (isvalid_uuid(key)) {
-        state.private.key = key
+        state.key = key
     }
 
     if (key) {
-        window.history.replaceState({}, document.title, "/shared?id=" + state.private.id);
+        window.history.replaceState({}, document.title, "/shared?id=" + state.id);
     }
 } else {
-    if (localStorage.getItem(state.private.id)) {
-        state = parse(localStorage.getItem(state.private.id))
+    if (localStorage.getItem(state.id)) {
+        state = parse(localStorage.getItem(state.id))
     }
     syncStatus.button.style.display = "none"
 }
 
 
-if (shared && !state.private.key) { // if shared but no write-key 
+if (shared && !state.key) { // if shared but no write-key 
     quill.disable()
 } else {
     let element = document.getElementById("main-content")
@@ -492,21 +488,21 @@ if (shared && !state.private.key) { // if shared but no write-key
 
 
 
-if (!localStorage.getItem(state.private.id)) {
-    state.private.title = createRandomWord(6, state.private.id)
+if (!localStorage.getItem(state.id)) {
+    state.title = createRandomWord(6, state.id)
     saveToLocalStorage()
 }
 
 
-if (state.private.title) {
-    window.document.title += ' | ' + state.private.title
+if (state.title) {
+    window.document.title += ' | ' + state.title
 } else {
-    window.document.title += ' | ' + state.private.id
+    window.document.title += ' | ' + state.id
 }
 
 
-if (state.public.content) {
-    quill.setContents(state.public.content, 'silent')
+if (state.content) {
+    quill.setContents(state.content, 'silent')
 }
 
 

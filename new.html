@@ -8,19 +8,16 @@ layout: bare
         let newID = random_boxid()
         var state = {
             jsonboxIdentifier: jsonboxIdentifier,
-            private: {
-                key: random_uuid(),
-                id: newID,
-                LastModified: new Date(),
-                title: createRandomWord(6, newID)
-            },
-            public: {
-                content: undefined
-            }
+            key: random_uuid(),
+            id: newID,
+            LastModified: new Date(),
+            title: createRandomWord(6, newID),
+            content: undefined
         }
 
-        localStorage.setItem(state.private.id, JSON.stringify(state))
 
-        window.location.href = window.location.origin + "/shared?id=" + state.private.id
+        localStorage.setItem(state.id, JSON.stringify(state))
+
+        window.location.href = window.location.origin + "/shared?id=" + state.id
     }
 </script>
