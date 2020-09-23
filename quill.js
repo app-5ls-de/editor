@@ -188,14 +188,6 @@ ifvisible.wakeup(function() {
     synchronizeInterval = setInterval(synchronizeThrottled, 30 * 1000) // If page is visible run this function on every 30 seconds
 });
 
-document.onkeydown = function(e) {
-    if (e.ctrlKey && e.key == "s") {
-        console.log("Strg+s")
-        synchronizeThrottled()
-        return false;
-    }
-};
-
 var syncStatus = {
     button: document.getElementById("sync-button"),
     isReady: function () {
@@ -418,6 +410,15 @@ document.getElementById("sync-button").addEventListener('click', () => {
     ifvisible.wakeup() 
     if (syncStatus.isReady()) syncStatus.set("neutral")
 })
+
+document.onkeydown = function(e) {
+    if (e.ctrlKey && e.key == "s") {
+        console.log("Strg+s")
+        ifvisible.wakeup() 
+        if (syncStatus.isReady()) syncStatus.set("neutral")
+        return false;
+    }
+};
 
 //#endregion setup
 
