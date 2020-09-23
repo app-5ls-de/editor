@@ -456,11 +456,22 @@ if (shared) {
     }
 
     if (localStorage.getItem(state.id)) {
-        state = parse(localStorage.getItem(state.id))
+        oldState = parse(localStorage.getItem(state.id))
+        oldState.id = state.id
+        if (!oldState.jsonboxIdentifier || oldState.jsonboxIdentifier != state.jsonboxIdentifier) {
+            syncStatus.set("disabled")
+            if (oldState.public) {
+                oldState.content = oldState.public.content
+            }
+            oldState.public = undefined
+            oldState.private = undefined
+            oldState.key = undefined
+        }
+        state = oldState
     }
 
     let key = params.get('pwd')
-    if (isvalid_uuid(key)) {
+    if (isvalid_uuid(key) && syncStatus.isEnabled()) {
         state.key = key
     }
 
@@ -471,10 +482,10 @@ if (shared) {
     if (localStorage.getItem(state.id)) {
         state = parse(localStorage.getItem(state.id))
     }
-    syncStatus.button.style.display = "none"
+    syncStatus.set("disabled")
 }
 
-if (shared) {
+if (syncStatus.isEnabled()) {
     window.addEventListener('online', handleConnection);
     window.addEventListener('offline', handleConnection);
     handleConnection()
