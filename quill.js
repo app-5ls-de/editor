@@ -13,7 +13,7 @@ function getRemoteData(callback) {
         sortQuery = "&q=id:>" + state.private.LastSyncedId
     }
 
-    fetch('https://jsonbox.io/' + state.jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
+    fetch(jsonboxOrigin + '/' + state.jsonboxIdentifier + state.private.id + "?limit=1000&sort=id" + sortQuery)
         .then((response) => {
             if (response.ok) {
                 return Promise.resolve(response)
@@ -79,7 +79,7 @@ function setRemoteData(changesToUpload, callback) {
         body: JSON.stringify(data)
     }
 
-    fetch('https://jsonbox.io/' + state.jsonboxIdentifier + state.private.id, options)
+    fetch(jsonboxOrigin + '/' + state.jsonboxIdentifier + state.private.id, options)
         .then((response) => {
             if (response.ok) {
                 return Promise.resolve(response)
@@ -238,7 +238,7 @@ function handleConnection() { // https://stackoverflow.com/a/44766737
     }
 
     if (navigator.onLine) {
-        isReachable("https://jsonbox.io/connectivitychecking").then(function(online) {
+        isReachable(jsonboxOrigin).then(function(online) {
             if (online) {
                 // handle online status
                 console.log('online');
@@ -437,7 +437,7 @@ document.onkeydown = function(e) {
 
 //#region init
 
-var jsonboxIdentifier = "imANthQVo4v4WZaGnpoC" + "_"
+var jsonboxOrigin = "https://jsonbox.io"
 var state = {
         private: {
     jsonboxIdentifier: jsonboxIdentifier,
