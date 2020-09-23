@@ -315,13 +315,14 @@ quill.on('editor-change', (eventName, range, oldRange, source) => {
 })
 
 function insertText(text) {
+    console.log(text)
     quill.deleteText(LastSelection)
     let Selection = LastSelection // after quill.insertText 'editor-change' is emited -> save selection to transform with delta
     let delta = quill.insertText(LastSelection.index, text)
     quill.setSelection(delta.transformPosition(Selection.index), 0)
 }
 
-emoji_picker.on('emoji', insertText)
+emoji_picker.on('emoji', function (e){ insertText(e.emoji)})
 document.getElementById("emoji-button").addEventListener('click', () => {
     emoji_picker.togglePicker(toolbar)
 })

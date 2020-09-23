@@ -14,7 +14,7 @@ const PRECACHE_URLS = [
     '/quill-v1.3.7/quill.snow.css',
     '/normalize.css-v8.0.1/normalize.min.css',
     '/ifvisible.js-v1.0.6/ifvisible.js',
-    '/emoji-button-v3.1.1/emoji-button.min.js',
+    '/emoji-button-v4.2.0/emoji-button.min.js',
     '/pickr-v1.7.4/nano.min.css',
     '/pickr-v1.7.4/pickr.min.js',
     '/local',
