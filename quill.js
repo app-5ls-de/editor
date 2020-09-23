@@ -243,6 +243,7 @@ function handleConnection() { // https://stackoverflow.com/a/44766737
             } else {
                 isReachable("https://detectportal.firefox.com/success.txt").then(function(online) {
                     if (online) {
+                        // firefox isReachable but jsonbox is not
                         console.log('error');
                         syncStatus.set("error")
                     } else {
