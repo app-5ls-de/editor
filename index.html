@@ -245,7 +245,9 @@ layout: bare
     }
 
     for (const key in localStorage) {
-        if (localStorage.hasOwnProperty(key) && key != "local" && key != "null" && key != "settings") {
+        if (localStorage.hasOwnProperty(key)) {
+            if (!isvalid_boxid(key)) continue
+
             let element
             try {
                 element = JSON.parse(localStorage[key])
