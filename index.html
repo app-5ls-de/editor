@@ -115,6 +115,7 @@ layout: bare
         var newTitle = prompt("Please enter the new title:", title)
         if (newTitle != null && newTitle != "") {
             element.title = newTitle.trim()
+            element.titleUpdate = true
             localStorage.setItem(id, JSON.stringify(element))
             document.getElementById(id).firstElementChild.innerText = element.title
         }

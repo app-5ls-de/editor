@@ -34,35 +34,36 @@ function getRemoteData(callback) {
 
 
 function setRemoteData(changesToUpload, callback) {
-    if (!changesToUpload) {
-        if (!state.changeSinceLastUpload) {
-            syncStatus.set("success")
-            return //nothing to do
+    let data
+    if (!changesToUpload || JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) {
+        if (state.titleUpdate) {
+            data = {
+                type: "title",
+                title: state.title
+            }
+            state.titleUpdate = undefined
+        } else {
+            if (state.changeSinceLastUpload) {
+                syncStatus.set("neutral")
+            } else {
+                syncStatus.set("success")
+            }
+            return // empty delta
         }
-        changesToUpload = copyDelta(state.changeSinceLastUpload)
-        state.changeSinceLastUpload = null
-    } else if (state.changeSinceLastUpload) {
-        changesToUpload = changesToUpload.compose(state.changeSinceLastUpload)
-        state.changeSinceLastUpload = null
+    } else {
+        data = {
+            type: "delta",
+            delta: JSON.stringify(changesToUpload)
+        }
     }
 
-    if (JSON.stringify(changesToUpload) == JSON.stringify(new Delta())) {
-        if (state.changeSinceLastUpload) {
-            syncStatus.set("neutral")
-        } else {
-            syncStatus.set("success")
-        }
-        return // empty delta
-    }
+    
+
     if (!state.key) {
         syncStatus.set("error")
         return
     }
 
-    data = {
-        type: "delta",
-        delta: JSON.stringify(changesToUpload)
-    }
     if (state.LastSyncedId) { //typeof state.LastSyncedId == "number"
         data.id = state.LastSyncedId
     } else {
@@ -103,7 +104,7 @@ function synchronize() {
     if (shared && syncStatus.isReady()) {
         syncStatus.set("running")
 
-        localChange = copyDelta(state.changeSinceLastUpload)
+        changesToUpload = copyDelta(state.changeSinceLastUpload)
         state.changeSinceLastUpload = null
         getRemoteData((data) => {
             if (data.length > 0) {
@@ -113,18 +114,18 @@ function synchronize() {
                     if (data[i].type) {
                         if (data[i].type == "delta") {
                             remoteChange = remoteChange.compose(new Delta(JSON.parse(data[i].delta)))
-                            LastId = data[i].id
                         } else if (data[i].type == "title") {
                             state.title = data[i].title
                         }
+                        LastId = data[i].id
                     }
                 }
 
-                if (localChange) {
-                    let remoteChangeTransformed = localChange.transform(remoteChange)
+                if (changesToUpload) {
+                    let remoteChangeTransformed = changesToUpload.transform(remoteChange)
                     quill.updateContents(remoteChangeTransformed, 'silent')
 
-                    localChange = remoteChange.transform(localChange, true)
+                    changesToUpload = remoteChange.transform(changesToUpload, true)
                 } else {
                     quill.updateContents(remoteChange, 'silent')
                 }
@@ -134,8 +135,21 @@ function synchronize() {
                     saveToLocalStorage()
                 }
             }
+            
 
-            setRemoteData(localChange, (data) => {
+            if (!changesToUpload) {
+                if (!state.changeSinceLastUpload && !state.titleUpdate) {
+                    syncStatus.set("success")
+                    return //nothing to do
+                }
+                changesToUpload = copyDelta(state.changeSinceLastUpload)
+                state.changeSinceLastUpload = null
+            } else if (state.changeSinceLastUpload) {
+                changesToUpload = changesToUpload.compose(state.changeSinceLastUpload)
+                state.changeSinceLastUpload = null
+            }
+
+            setRemoteData(changesToUpload, (data) => {
                 state.LastSyncedId = data.id
                 saveToLocalStorage()
 
