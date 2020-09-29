@@ -453,7 +453,7 @@ document.onkeydown = function(e) {
 
 //#region init
 
-var jsonboxOrigin = "https://jsonbox.io"
+var jsonboxOrigin = "https://api.5ls.de"
 var state = {
     jsonboxIdentifier: jsonboxIdentifier,
     key: undefined,

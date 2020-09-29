@@ -1,4 +1,4 @@
-var jsonboxIdentifier = "imANthQVo4v4WZaGnpoC" + "_"
+var jsonboxIdentifier = "v01" + "_"
 
 function random_uuid() {
     function b(a) {
@@ -30,7 +30,7 @@ function isvalid_uuid(uuid) {
 function isvalid_boxid(boxid) {
     if (!boxid) return false
     if (typeof boxid != "string") return false
-    if (boxid.length == 0) return false
+    if (boxid.length < 20) return false
     if (boxid == "local" || boxid == "null" || boxid == "settings" || boxid == "emojiPicker.recent") return false
 
     return true
