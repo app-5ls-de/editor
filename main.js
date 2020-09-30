@@ -1,4 +1,4 @@
-var jsonboxIdentifier = "v01" + "_"
+var jsonboxIdentifier = "v02" + "_"
 
 function random_uuid() {
     function b(a) {
