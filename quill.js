@@ -313,6 +313,17 @@ document.getElementById("print-button").addEventListener('click', () => {
     window.print()
 })
 
+window.addEventListener("beforeprint", function(e) { quill.blur() })
+
+var mediaQueryList = window.matchMedia('print');
+mediaQueryList.addListener(function(mql) {
+  if(mql.matches) {
+    // webkit equivalent of onbeforeprint
+    quill.blur()
+  }
+})
+
+
 let toolbar = document.getElementById("toolbar-container")
 var emoji_picker = new EmojiButton({
     'position': 'bottom-end',
@@ -453,7 +464,7 @@ document.onkeydown = function(e) {
 
 //#region init
 
-var jsonboxOrigin = "https://api.5ls.de"
+var jsonboxOrigin = "https://api.editor.app.5ls.de"
 var state = {
     jsonboxIdentifier: jsonboxIdentifier,
     key: undefined,

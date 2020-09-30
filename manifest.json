@@ -1,61 +1,26 @@
 {
-    "dir": "ltr",
-    "lang": "en",
     "name": "Editor",
-    "scope": "/",
-    "display": "minimal-ui",
-    "start_url": "/",
     "short_name": "Editor",
-    "description": "Editor",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
-    "generated": "true",
-    "icons": [{
-            "src": "/logo16px.png",
-            "sizes": "16x16"
-        },
+    "icons": [
         {
-            "src": "/logo24px.png",
-            "sizes": "24x24"
-        },
-        {
-            "src": "/logo32px.png",
-            "sizes": "32x32"
-        },
-        {
-            "src": "/logo64px.png",
-            "sizes": "64x64"
-        },
-        {
-            "src": "/logo128px.png",
-            "sizes": "128x128"
-        },
-        {
-            "src": "/logo192px.png",
-            "sizes": "192x192"
-        },
-        {
-            "src": "/logo256px.png",
-            "sizes": "256x256"
-        },
-        {
-            "src": "/logo512px.png",
-            "sizes": "512x512"
-        },
-        {
-            "src": "/maskable_icon-192px.png",
+            "src": "/icons/android-chrome-192x192.png",
             "sizes": "192x192",
-            "purpose": "maskable"
+            "type": "image/png"
         },
         {
-            "src": "/maskable_icon-512px.png",
+            "src": "/icons/android-chrome-512x512.png",
             "sizes": "512x512",
-            "purpose": "maskable"
+            "type": "image/png"
         },
         {
-            "src": "/maskable_icon.png",
+            "src": "/icons/maskable_icon.png",
             "sizes": "1024x1024",
-            "purpose": "maskable"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
-    ]
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "start_url": "/",
+    "display": "standalone"
 }
