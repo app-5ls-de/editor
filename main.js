@@ -1,4 +1,4 @@
-var jsonboxIdentifier = "v02" + "_"
+var jsonboxIdentifier = "editor-v2" + "_"
 
 function random_uuid() {
     function b(a) {
