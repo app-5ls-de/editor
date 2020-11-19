@@ -464,7 +464,7 @@ document.onkeydown = function(e) {
 
 //#region init
 
-var jsonboxOrigin = "https://api.editor.app.5ls.de"
+var jsonboxOrigin = "https://jsonbox.io"
 var state = {
     jsonboxIdentifier: jsonboxIdentifier,
     key: undefined,
